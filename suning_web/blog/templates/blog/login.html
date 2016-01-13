@@ -1,0 +1,25 @@
+<html>
+<head>
+<style>
+    *{margin:0;padding:0}
+
+</style>
+</head>
+<body>
+<form class="form_login" action="." method="post">
+    <div>{{form.phone.label}}:</div>
+        <div>{{form.phone}}</div>
+    {% if form.errors.phone %}
+        <span style="color:red;">{{form.errors.phone}}</span>
+    {% endif %}
+    <div>{{form.password.label}}:</div>
+        <div>{{form.password}}</div>
+    {% if form.errors.password %}
+        <span style="color:red;">{{form.errors.password}}</span>
+    {% endif %}
+    <div class="confirm_login"><button>登陆</button></div>
+</form>
+
+</body>
+
+</html>

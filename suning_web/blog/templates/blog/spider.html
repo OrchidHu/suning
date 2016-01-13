@@ -1,0 +1,11 @@
+<form class="form_login" action="." method="post">
+    <div>{{form.cycle.label}}:</div>
+        <div>{{form.cycle}}</div>
+    {% if form.errors.cycle %}
+        <span style="color:red;">{{form.errors.cycle}}</span>
+    {% endif %}
+    <div class="confirm_login"><button>抓取</button></div>
+    {% if not p %}
+        <span style="color:red;">抓取中....</span>
+    {% endif %}
+</form>

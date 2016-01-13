@@ -1,0 +1,67 @@
+﻿
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<div id="price" >{{context}}</div>
+<title>
+	查询历史最低价
+</title>
+    <script type="text/javascript"  language="javascript" src="/static/blog/js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript"   language="javascript" src="/static/blog/js/priceline.js" charset="gb2312"></script>
+    <script type="text/javascript"  language="javascript" src="/static/blog/js/highstock.js"></script>
+    
+    <style type="text/css">
+        body, div
+        {
+            border: 0px;
+            margin: 0px;
+            padding: 0px;
+            font-size: 14px;
+        }
+        A.f12sc:link, A.f12sc:active, A.f12sc:visited
+        {
+            font-size: 12px;
+            text-decoration: none;
+            color: #005AA0;
+        }
+        .bigwidth
+        {
+            margin: 8px 0px 10px 0px;
+            padding: 10px 0px 10px 0px;
+            border-bottom: 1px solid #ccc;
+            color: #ccc;
+        }
+        .smallwidth
+        {
+            color: #ccc;
+        }
+        .bigwordprice
+        {
+            color: Red;
+        }
+        .smallwordprice
+        {
+        }
+    </style>
+</head>
+<body>
+    
+    <div style="width: 400px; height: 300px;">
+        
+        <div class="bigwidth">
+            
+            <span style="color: #333; font-size: 14px;;">
+                 &nbsp; <font style='font-size:12px;'>价格上涨 &nbsp; </font>
+
+
+                历史最低<font class="bigwordprice">{{lowest}}</font> <font style="font-size: 12px;">
+                    (2015-6-11)</font>
+                 </span>
+                  
+        </div>
+        
+        <div id="container" style="width: 400px; height: 300px; margin: 0 auto">
+        </div>
+        
+    </div>
+</body>
+</html>

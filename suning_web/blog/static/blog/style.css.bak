@@ -1,0 +1,23 @@
+body{
+  font-size:11px;	
+	}
+.price_down{
+	background:#eaffff;
+  #width:900px;
+  }
+.price_up{
+	background:#eaffff;
+  #width:900px; 
+  }
+.down_title{
+	float:left; width:700px;
+	padding-left:20px;
+	}
+.up_title{
+	float:left; width:700px;
+	padding-left:20px; 
+	}
+#a:active{text-decoration:underline;}
+a:visited{text-decoration:none; /*超链接无下划线*/}
+a:link{text-decoration:none; /*超链接无下划线*/}
+a:hover { text-decoration: underline; color: red;}

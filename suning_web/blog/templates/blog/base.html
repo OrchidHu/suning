@@ -1,0 +1,106 @@
+
+<!DOCTYPE HTML>
+
+<html>
+<style>
+body{ font-size:12px;}
+.box{width:1200px; float:left;}
+ul,body,dd,li{ list-style:none;
+margin:0;padding:0; }
+.page{ height:58px; width:600px; float:left; padding-left:200px; text-align:center;}
+.link_block { padding:5px 10px 5px 12px; border:1px solid #CCC; display:inline-block; text-decoration:none; background:#fff;}
+.link_block:hover{padding:5px 0px px 12px; background: #CCC;}
+.link_block a:link{text-decoration: none;}
+.input_text {
+        width: 30px;
+        border-style: solid ;
+        border-width: 1px, 1px, 1px;
+        border-color: #CECFD7;
+}
+.prompt_word { display:inline-block; color: #555;}
+.current {padding:5px 10px 5px 12px; border:1px solid #CCC; display:inline-block; text-decoration:none; background:#CCC;}
+</style>
+<head>
+	<title>Page Title</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="description" content="Description" />
+</head>
+<body>
+	<header>
+		<nav>
+		</nav>			
+	</header>
+	 </h1>
+	 {% if context|length >= 1 %}
+  	{% for em in context %}
+  	 <div class="box">
+  		<div style="width:100px;float:left;">{{em.crawl_time}}</div>
+  		<div style="width:400px;float:left;">{{em.name}}</div>
+      <div style="width:50px; float:left;"><img alt="" title="" src="/static/blog/images/tooldown.png"/> </div>
+  		<div style="width:100px;float:left;">{{em.price}}</div>
+  		<div style="width:100px;float:left;">{{em.last_price}}</div>
+      <div style="width:100px;float:left;">
+      	  <span style="float:right;padding-right:80px;"><a href="tool/?phone_id={{em.ident}}">
+      	 	<img alt="" title="" src="/static/blog/images/toolhistory.png"/></a></span>
+      </div>
+                 
+     </div>
+      <!-- <form name="input" action="http://localhost:8000/cgi-bin/myscript.py" method="get">
+        <input type="submit" value="监控">
+      </form> -->
+ 	 </div> 
+  	{% endfor %}
+
+   {% endif %}
+
+
+	<div class="page"; style="width:800px;">
+		{% if context.has_previous %}
+			<div class="link_block">
+				<a href="?page={{ context.previous_page_number }}">
+					&lt;&lt; 上一页
+				</a>
+			</div>
+		{% endif %}
+
+		<span>
+		{% if num_pages >= 2 %}
+			{% for p in page_list %}
+
+				{% ifequal p context.number %}
+
+					<div class="current">{{p}}</div>
+
+				{% else %}
+
+					<div class="link_block"><a href="?page={{p}}" title="第{{p}}页">{{p}}</a></div>
+
+				{% endifequal %}
+
+			{% endfor %}
+
+		</span>
+
+			{% if context.has_next %}
+				<div class="link_block"> <a href="?page={{ context.next_page_number }}">下一页&gt;&gt;</a></div>
+			{% endif %}
+				<div class="prompt_word";>
+					<form method="get" name="filterPageForm">到第
+    					<input class="input_text" type="text" value="1" size="1" name="page">页
+						<button class="ui-btn-s" type="submit">确定</button>
+					</form>
+				</div>
+
+				<div class="prompt_word">
+					<a>[第{{pk}}/{{ context.paginator.num_pages }}页]</a>
+				</div>
+		{% endif %}
+
+	</div>
+	
+	<footer>
+	</footer>
+
+</body>
+
+</html>
