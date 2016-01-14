@@ -17,7 +17,8 @@
     {% if form.errors.password %}
         <span style="color:red;">{{form.errors.password}}</span>
     {% endif %}
-    <div class="confirm_login"><button>登陆</button></div>
+    <span class="confirm_login"><button>登陆</button></span>
+    <span class="confirm_register"><a href="{% url 'blog:register' %}">注册</a></span>
 </form>
 
 </body>
