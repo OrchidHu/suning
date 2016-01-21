@@ -9,10 +9,10 @@
 import MySQLdb
 class SuningPipeline(object):
     def __init__(self,mysql_host,mysql_db,mysql_user,mysql_passwd):
-        self.mysql_host=host='127.0.0.1'
-        self.mysql_db='suning_shopping3'
-        self.mysql_user='root'
-        self.mysql_passwd='123'
+        self.mysql_host = host = '127.0.0.1'
+        self.mysql_db = 'suning'
+        self.mysql_user = 'root'
+        self.mysql_passwd = 'huwei'
     @classmethod
     def from_crawler(cls,crawler):
         return cls(
@@ -43,11 +43,11 @@ class SuningPipeline(object):
     #     self.conn.commit()
     #     #log.msg("Question added to MySQLdb database!",level=log.DEBUG,spider=spider)
     #     return item
-    def process_item(self,item,spider):
-        crawl_time=item['crawl_time']
-        price=item['price']
-        ident=item['ident']
-        last_price=item['last_price']
+    def process_item(self, item, spider):
+        crawl_time = item['crawl_time']
+        price = item['price']
+        ident = item['ident']
+        last_price = item['last_price']
         self.cursor.execute('INSERT INTO blog_updata(ident,price,last_price,crawl_time)VALUES(%s,%s,%s,%s)',(ident,price,last_price,crawl_time))
         self.conn.commit()
         return item
