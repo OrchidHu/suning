@@ -1,12 +1,12 @@
 #coding=utf-8
-
-DATABASES = {
+TABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME':'suning_shopping3',
+        'NAME':'suning',
         'USER':'root',
-        'PASSWORD':'123',
+        'PASSWORD':'huwei',
         'HOST':'',
         'PORT':'',
     }
 }
+

@@ -1,0 +1,26 @@
+body{
+  font-size:11px;	
+  }
+.price_down{
+	background:#eaffff;
+  width:1240px;
+  }
+.price_up{
+	background:#eaffff;
+  width:1240px; 
+  }
+.down_title{
+        float:left; width:700px;
+	padding-left:50px;
+	}
+.up_title{
+	float:left; width:700px;
+	padding-left:50px; 
+	}
+a.time1:hover,a.time2:hover,a.time3:hover{border-style:solid; border:1px white solid;}
+.img:hover{ border-style:solid; border:1px black solid;}
+
+a:visited{text-decoration:none; /*超链接无下划线*/}
+a:link{text-decoration:none; /*超链接无下划线*/}
+a:hover { text-decoration: underline; color: red;}
+a:active{ text-decoration: underline;}

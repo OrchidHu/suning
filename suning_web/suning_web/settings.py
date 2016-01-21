@@ -12,11 +12,9 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-STATIC_ROOT = '/static/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/').replace('\\', '/')
-TEMPLATE_PATH = os.path.join(BASE_DIR, 'Web/templates/').replace('\\', '/')
+SITE_ROOT = os.path.dirname(os.path.abspath(__file__))
+SITE_ROOT = os.path.abspath(os.path.join(SITE_ROOT, '../'))
+STATIC_ROOT = os.path.join(SITE_ROOT, 'collectedstatic')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -31,7 +29,11 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    #'django.contrib.staticfiles.finders.DefaultStorageFinder',
+)
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -51,7 +53,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     #'django.middleware.security.SecurityMiddleware',
-    #'pagination.middleware.PaginationMiddleware',
+    'pagination.middleware.PaginationMiddleware',
 )
 
 ROOT_URLCONF = 'suning_web.urls'
@@ -103,12 +105,12 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
+ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 try:
     from local.local_settings import *  # noqa
 except ImportError:
