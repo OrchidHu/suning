@@ -12,9 +12,10 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-SITE_ROOT = os.path.dirname(os.path.abspath(__file__))
-SITE_ROOT = os.path.abspath(os.path.join(SITE_ROOT, '../'))
-STATIC_ROOT = os.path.join(SITE_ROOT, 'collectedstatic')
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/').replace('\\', '/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/').replace('\\', '/')
+TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates/').replace('\\', '/')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
