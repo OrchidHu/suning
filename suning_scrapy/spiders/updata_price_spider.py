@@ -47,20 +47,20 @@ class MySpider(scrapy.Spider):
             yield scrapy.Request(url=next_url, meta={'title':title},callback=self.parse)
     #解析价格
     def parse_price(self, response):
-        conn=MySQLdb.connect(host='localhost',user='root',passwd='123',db='suning_shopping3',port=3306,charset='utf8')
+        conn=MySQLdb.connect(host='localhost',user='root',passwd='huwei',db='suning',port=3306,charset='utf8')
         cur=conn.cursor()
         item=response.meta['item']
         price=re.search(r'"price":"([\d]+.[\d]+)',response.body)
         #只抓当地有货的商品
         if price:
-            old_price=cur.execute('select price from suning_shopping3.blog_shopping where ident=%s'%item['ident'])
+            old_price=cur.execute('select price from suning.blog_shopping where ident=%s'%item['ident'])
             if old_price:
                 old_price=cur.fetchmany(old_price)
             price=price.group(1)
             item['price']=price
             if old_price:
                 if price!=old_price[0][0]:
-                    cur.execute("UPDATE suning_shopping3.blog_shopping SET price=%s,crawl_time=%s WHERE ident=%s"%(price,item['crawl_time'],item['ident']))
+                    cur.execute("UPDATE suning.blog_shopping SET price=%s,crawl_time=%s WHERE ident=%s"%(price,item['crawl_time'],item['ident']))
                     conn.commit()
                     item['last_price']=old_price[0][0]
                     #每解析完一个商品后, 有价格变化就入库

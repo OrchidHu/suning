@@ -159,7 +159,7 @@ class Register(ArgsMixin, TemplateView):
             )
             partner.password = form.cleaned_data.get("password")
             partner.save()
-            return redirect("/blog/login/")
+            return redirect("blog:login")
         context["errors"] = form.errors
         return self.render_to_response(context)
 
@@ -175,14 +175,12 @@ class Login(ArgsMixin, TemplateView):
 
     def post(self, request):
         context = self.get_context_data()
-        request.GET.get('next',
-                        resolve_url("/blog/?page=1"))
         form = forms.LoginForm(request.POST)
-        context['form'] = form
         if form.is_valid():
             request.session['username'] = form.cleaned_data.get('phone')
-            return redirect("/blog/spider/")
-        return self.render_to_response(context)
+            return redirect("blog:spider")
+        context["form"] = form
+	return self.render_to_response(context)
 
 
 class Spider(ArgsMixin, TemplateView):
@@ -195,7 +193,7 @@ class Spider(ArgsMixin, TemplateView):
             form = forms.SpiderForm()
             context['form'] = form
             return self.render_to_response(context)
-        return self.render_to_response("/blog/login.html")
+        return self.render_to_response(context)
 
     def post(self, request):
         context = self.get_context_data()

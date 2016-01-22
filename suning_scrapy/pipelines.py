@@ -10,9 +10,9 @@ import MySQLdb
 class SuningPipeline(object):
     def __init__(self,mysql_host,mysql_db,mysql_user,mysql_passwd):
         self.mysql_host=host='127.0.0.1'
-        self.mysql_db='suning_shopping3'
+        self.mysql_db='suning'
         self.mysql_user='root'
-        self.mysql_passwd='123'
+        self.mysql_passwd='huwei'
     @classmethod
     def from_crawler(cls,crawler):
         return cls(

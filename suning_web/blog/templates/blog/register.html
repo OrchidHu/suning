@@ -6,7 +6,7 @@
 </style>
 </head>
 <body>
-<form class="form_login" action="." method="post">
+<form class="form_login" action="." method="post">{% csrf_token %}
     <div>{{form.phone.label}}:</div>
         <div>{{form.phone}}</div>
     {% if form.errors.phone %}

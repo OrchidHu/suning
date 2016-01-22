@@ -26,7 +26,7 @@ urlpatterns = [
     ),
     url(
         r'^spider/$',
-        login_required(views.Spider.as_view()),
+        views.Spider.as_view(),
         name='spider'
     )
 ]
