@@ -185,20 +185,32 @@ class Login(ArgsMixin, TemplateView):
 class Spider(ArgsMixin, TemplateView):
     template_name = "blog/spider.html"
 
+    def __init__(self):
+        self.proc = None
+
     def get(self, request):
+        context = self.get_context_data()
         username = request.session.get('username')
+        kill = request.GET.get("kill")
+        pid = request.GET.get("pid")
+        if pid:
+            pass
+        if kill:
+            self.proc = request.GET.get("proc")
+            subprocess.Popen('kill -9 %s' % self.proc, shell=True)
+            context["p"] = 0
         if username:
-            context = self.get_context_data()
             form = forms.SpiderForm()
             context['form'] = form
             return self.render_to_response(context)
-        return redirect("blog:spider")
+        return redirect("blog:login")
 
     def post(self, request):
         context = self.get_context_data()
         form = forms.SpiderForm()
         cycle = request.POST.get("cycle")
-        p = subprocess.Popen("python /home/hw/hello.py %s" % cycle, shell=True)
+        self.proc = subprocess.Popen('python /home/huwei/hello.py %s' % cycle, stdout=subprocess.PIPE, shell=True)
         context["form"] = form
-        context["p"] = p.poll()
+        context["p"] = 1
+        context["proc"] = self.proc.pid
         return self.render_to_response(context)
