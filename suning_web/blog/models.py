@@ -109,5 +109,10 @@ class Spider(models.Model):
         default=3600*24
     )
 
+    status = models.CharField(
+        verbose_name=u'状态',
+        max_length=10,
+        default='run'
+    )
 
 admin.site.register(Partner)

@@ -209,7 +209,7 @@ class Spider(ArgsMixin, TemplateView):
         context = self.get_context_data()
         form = forms.SpiderForm()
         cycle = request.POST.get("cycle")
-        self.proc = subprocess.Popen('python /home/huwei/hello.py %s' % cycle, stdout=subprocess.PIPE, shell=True)
+        self.proc = subprocess.Popen('python /home/huwei/suning/suning_web/start.py %s' % cycle, shell=True)
         context["form"] = form
         context["p"] = 1
         context["proc"] = self.proc.pid
