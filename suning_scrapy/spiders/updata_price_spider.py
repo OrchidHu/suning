@@ -1,76 +1,59 @@
-#coding:utf8
-import scrapy,re,urllib,MySQLdb,time
+# coding:utf8
+
+import re
+import time
+import scrapy
+import MySQLdb
 from suning_scrapy.items import SuningItem
-from scrapy.http import Request
+
 
 class MySpider(scrapy.Spider):
     name = 'updata'
     allowed_domains = []
-    
-    def start_requests(self):
-        yield scrapy.Request('http://list.suning.com/0-20006-0-0-0-9265.html#sourceUrl4Sa=http://www.suning.com/?utm_source=sogou&utm_medium=brand&utm_campaign=title', self.parse_url)
+    start_urls = None
+    # 解析出所有品牌
 
-    #解析出所有品牌    
-    def parse_url(self, response):
-        for sel in response.xpath('//div[@class="attr-list"]/ul//li'):
-            title = sel.xpath('@title').extract()[0]
-            url = 'http://list.suning.com'+sel.xpath('a/@href').extract()[0]
+    def __init__(self, urls=None, user_id=None, *args, **kwargs):
+        super(MySpider, self).__init__(*args, **kwargs)
+        self.start_urls = urls.split(',')
+        self.user_id = user_id
+        self.conn = MySQLdb.connect(host='127.0.0.1', user='root', passwd='123', db='suning', port=3306, charset='utf8')
+        self.cursor = self.conn.cursor()
 
-            #每获得一个品牌的路径,调用一次parse函数,解析出该名牌的所有手机信息
-            yield scrapy.Request(url, meta={'title': title}, callback=self.parse)
-
-    #解析每个品牌手机的具体信息
     def parse(self, response):
-        title=response.meta['title']
-        for sel in response.xpath('//ul/li'):
-            ident = sel.xpath('div/div[@class="i-price limit clearfix"]/p/@datasku').extract()
-            name = sel.xpath('div/div[@class="i-name limit clearfix"]/a/@title').extract()
-            link = sel.xpath('div/div[@class="i-name limit clearfix"]/a/@href').extract()
-            comment = sel.xpath('div/div[@class="i-stock limit clearfix"]/a/span/text()').extract()
-            if len(ident) == 1:
-                item = SuningItem()
-                ident = re.search(r'([\d]+)',ident[0]).group()
-                item['ident'] = ident
-                item['title'] = title
-                item['name'] = name
-                item['link'] = link
-                item['comment'] = comment
-                tm = time.time()
-                item['crawl_time'] = tm
-                item_url = 'http://ds.suning.cn/ds/prices/000000000'+ident+'-9265--1-SES.product.priceCenterCallBack.jsonp'
-                yield scrapy.Request(url=item_url, meta={'item': item}, callback=self.parse_price)
-        
-        #翻页处理
-        next_url = response.xpath('//div/a[@class="next fl"]/@href').extract()
-        if next_url:
-            next_url = 'http://list.suning.com'+next_url[0]
-            yield scrapy.Request(url=next_url, meta={'title': title}, callback=self.parse)
-    #解析价格
+        ident = re.search(r'([\d]{9}).html', response.url).group(1)
+        item = SuningItem()
+        item['ident'] = ident
+        item['user_id'] = self.user_id
+        item['name'] = response.xpath('//div[@class="proinfo-title"]/h1/text()').extract()[0]
+        item['crawl_time'] = time.time()
+        item['image_url'] = "http://image5.suning.cn/b2c/catentries/000000000%s_1_120x120.jpg" % ident
+        price_url = 'http://ds.suning.cn/ds/prices/000000000' + ident + '-9265--1-SES.product.priceCenterCallBack.jsonp'
+        yield scrapy.Request(url=price_url, meta={'item': item}, callback=self.parse_price)
+        is_exist = self.cursor.execute('SELECT * FROM blog_comment WHERE ident=%s' % ident)
+        if is_exist == 0:
+            self.cursor.execute('INSERT INTO blog_comment(ident)VALUES(%s)' % ident)
+            self.conn.commit()
+
     def parse_price(self, response):
-        conn=MySQLdb.connect(host='localhost',user='root',passwd='huwei',db='suning',port=3306,charset='utf8')
-        cur=conn.cursor()
-        item=response.meta['item']
-        price=re.search(r'"price":"([\d]+.[\d]+)', response.body)
-        #只抓当地有货的商品
+        item = response.meta['item']
+        price = re.search(r'"price":"([\d]+.[\d]+)', response.body)
         if price:
-            old_price=cur.execute('select price from suning.blog_shopping where ident=%s'%item['ident'])
-            if old_price:
-                old_price = cur.fetchmany(old_price)
             price = price.group(1)
+            datas = self.cursor.execute('SELECT id,price FROM blog_shopping WHERE ident=%s' % item['ident'])
             item['price'] = price
-            if old_price:
-                if price!=old_price[0][0]:
-                    item['last_price']=old_price[0][0]
-                    #每解析完一个商品后, 有价格变化就入库
+            if datas:
+                datas = self.cursor.fetchmany(datas)[-1:]
+                data_id = datas[0][0]
+                old_price = datas[0][1]
+                if price != old_price:
+                    if price > old_price.pop():
+                        item['ch_price'] = 'up'
+                    else:
+                        item['ch_price'] = 'down'
                     yield item
+                self.cursor.execute("UPDATE suning.blog_shopping SET crawl_time=%s WHERE ID=%s"%(time.time(), data_id))
+                self.conn.commit()
             else:
-                cur.execute('INSERT INTO blog_shopping(ident,title,name,price,crawl_time,comment,link)VALUES(%s,%s,%s,%s,%s,%s,%s)',(item['ident'],item['title'],item['name'][0],item['price'],item['crawl_time'],item['comment'][0],item['link'][0]))
-                conn.commit()
-
-                
-            
-                    
-                        
-            
-            
-
+                item['ch_price'] = 'stable'
+                yield item

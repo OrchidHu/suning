@@ -2,12 +2,12 @@
 from django.contrib.auth import authenticate, get_user_model
 import re
 from django import forms
-from blog.models import Partner, Spider
+from blog.models import Spider
 from Utils import regex
 User = get_user_model()
 
 
-class RegisterForm(forms.ModelForm):
+class RegisterForm(forms.Form):
 
     phone = forms.CharField(
         label=u'电话',
@@ -48,7 +48,6 @@ class RegisterForm(forms.ModelForm):
         return password2
 
     class Meta:
-        model = Partner
         fields = (
             'phone',
             'password'
@@ -61,7 +60,7 @@ class RegisterForm(forms.ModelForm):
         }
 
 
-class LoginForm(forms.ModelForm):
+class LoginForm(forms.Form):
 
     phone = forms.CharField(
         label=u'电话',
@@ -86,23 +85,11 @@ class LoginForm(forms.ModelForm):
     def clean_password(self):
         phone = self.cleaned_data.get("phone")
         password = self.cleaned_data.get("password")
-        if phone and not Partner.objects.filter(phone=phone):
+        if phone and not User.objects.filter(username=phone):
             raise forms.ValidationError('该手机号码未注册')
-        if phone and not Partner.objects.filter(phone=phone, password=password):
-            raise forms.ValidationError('用户名密码不正确')
+        if len(password) < 6:
+            raise forms.ValidationError('请确保密码个数至少为六位')
         return password
-
-    class Meta:
-        model = Partner
-        fields = (
-            'phone',
-            'password'
-        )
-        error_messages = {
-            "phone": {
-                "max_length": u"输入正确的电话号码"
-            }
-        }
 
 
 class SpiderForm(forms.ModelForm):
@@ -110,7 +97,7 @@ class SpiderForm(forms.ModelForm):
     class Meta:
         model = Spider
         fields = (
-            'cycle',
+            'cycle', 'url'
         )
         error_messages = {
             'required': u"请选择间隔抓取时间"

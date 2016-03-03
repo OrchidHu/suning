@@ -10,11 +10,10 @@ import scrapy
 
 class SuningItem(scrapy.Item):
     # define the fields for your item here like:
-    title=scrapy.Field()
+    ident = scrapy.Field()
     name = scrapy.Field()
-    comment=scrapy.Field()
-    link=scrapy.Field()
-    price=scrapy.Field()
-    last_price=scrapy.Field()
-    ident=scrapy.Field()
-    crawl_time=scrapy.Field()
+    price = scrapy.Field()
+    crawl_time = scrapy.Field()
+    user_id = scrapy.Field()
+    ch_price = scrapy.Field()
+    image_url = scrapy.Field()

@@ -1,6 +1,6 @@
 
-<!DOCTYPE HTML>
-
+{% load myfilter %}
+<!DOCTYPE html>
 <html>
 <style>
 body{ font-size:12px;}
@@ -31,18 +31,34 @@ margin:0;padding:0; }
 		</nav>			
 	</header>
 	 </h1>
-	 {% if context|length >= 1 %}
-  	{% for em in context %}
-  	 <div class="box">
-  		<div style="width:100px;float:left;">{{em.crawl_time}}</div>
-  		<div style="width:400px;float:left;">{{em.name}}</div>
-      <div style="width:50px; float:left;"><img alt="" title="" src="/static/blog/images/tooldown.png"/> </div>
-  		<div style="width:100px;float:left;">{{em.price}}</div>
-  		<div style="width:100px;float:left;">{{em.last_price}}</div>
-      <div style="width:100px;float:left;">
-      	  <span style="float:right;padding-right:80px;"><a href="tool/?phone_id={{em.ident}}">
-      	 	<img alt="" title="" src="/static/blog/images/toolhistory.png"/></a></span>
-      </div>
+	 {% if shopping|length >= 1 %}
+  	{% for em in shopping %}
+  	 <div class="box" style="padding:5px 0px 0px 100px;">
+		 <div style="width:120px;float:left;padding:15px;"><img src={{em.image_url}}></img></div>
+		 <div style="width:600px;float:left; padding:10px 10px 10px 0px;">
+			 <div style="width:600px;height:36px;float:left;font-size:16px;">{{em.name}}</div>
+			 <div style="width:600px;float:left;">
+				 <div style="width:50px;height:30px;float:left;padding:6px 0px 0px 0px;">当前价:</div>
+				 <div style="width:120px;height:36px;float:left;vertical-align:bottom;font-size:18px;color:red;"><i>¥</i>  {{em.price}}</div>
+				 <div style="width:400px;height:30px;float:left;padding:6px 0px 0px 0px;">
+						 {% if em.ch_price == 'stable' %}价格未变
+						 {% elif em.ch_price == 'up' %}价格上涨
+						 {% else %}价格下降
+						 {% endif %}
+				 </div>
+			 </div>
+
+			 <div style="width:60px; height:36px;float:left;">更新时间:</div>
+			 <div style="width:500px;height:36px;float:left;">{{em.crawl_time|formatTime}}</div>
+			 <!-- <div style="width:50px;"><img alt="" title="" src="/static/blog/images/tooldown.png"/> </div> -->
+
+			 <div style="width:80px;float:left">查看历史价格:</div>
+			 <div style="width:100px;float:left;">
+				 <span style="float:right;padding-right:80px;"><a href="tool/?phone_id={{em.ident}}">
+      	 		 <img alt="" title="" src="/static/blog/images/toolhistory.png"/></a></span>
+     		 </div>
+		 </div>
+
                  
      </div>
       <!-- <form name="input" action="http://localhost:8000/cgi-bin/myscript.py" method="get">

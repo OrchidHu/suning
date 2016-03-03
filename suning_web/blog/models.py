@@ -30,25 +30,18 @@ class Updata(models.Model):
 
 class Shopping(models.Model):
 
+    user = models.ForeignKey(
+        User,
+        related_name='shopping_user',
+        verbose_name=u'货主',
+    )
     ident = models.CharField(
         verbose_name=u"商品编号",
-        max_length=20
-    )
-    title = models.CharField(
-        verbose_name=u"品牌",
         max_length=20
     )
     name = models.CharField(
         verbose_name=u"商品名",
         max_length=200
-    )
-    comment = models.CharField(
-        verbose_name=u"评论条数",
-        max_length=20
-    )
-    link = models.CharField(
-        verbose_name=u"商品链接",
-        max_length=100
     )
     price = models.CharField(
         verbose_name=u"当前价",
@@ -58,36 +51,27 @@ class Shopping(models.Model):
         verbose_name=u"抓取时间",
         max_length=20
     )
+    ch_price = models.CharField(
+        verbose_name=u"价格变化",
+        max_length=10,
+    )
+    image_url = models.CharField(
+        verbose_name=u"图片",
+        max_length=500
+    )
 
     def __unicode__(self):
-        return self.name, self.link, self.comment, self.price
+        return self.name
 
 
-class Partner(models.Model):
+class Comment(models.Model):
 
-    user = models.OneToOneField(
-        User,
-        related_name='partner_user',
-        verbose_name=u'客户',
-    )
-    name = models.CharField(
-        verbose_name=u'姓名',
-        max_length=20,
-        null=True,
-        blank=True
-    )
-    phone = models.CharField(
-        verbose_name=u"手机号",
-        max_length=20
-    )
-    password = models.CharField(
-        verbose_name=u"密码",
-        max_length=20,
+    ident = models.CharField(
+        verbose_name=u"评论",
+        max_length=15,
+        unique=True,
         null=True
     )
-
-    def __unicode__(self):
-        return self.name, self.phone
 
 
 class Spider(models.Model):
@@ -100,6 +84,20 @@ class Spider(models.Model):
         (3600*24, u"一天"),
         (3600*48, u"两天"),
         (3600*144, u"一周")
+    )
+
+    user = models.ForeignKey(
+        User,
+        related_name="pa_spider",
+        verbose_name="个人爬虫",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+
+    url = models.TextField(
+        max_length=5000,
+        null=True
     )
 
     cycle = models.CharField(
@@ -115,4 +113,3 @@ class Spider(models.Model):
         default='run'
     )
 
-admin.site.register(Partner)

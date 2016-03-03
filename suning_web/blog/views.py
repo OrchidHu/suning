@@ -1,14 +1,15 @@
 # coding:utf-8
+import MySQLdb
 
 import datetime
+from django.contrib.auth import authenticate, get_user_model, login, logout
 import time
 from django.shortcuts import render_to_response, resolve_url, redirect
 from django.views.generic import TemplateView
 import subprocess
 from blog.models import (
     Updata,
-    Shopping,
-    Partner
+    Shopping
 )
 from Utils.django_utils import (
     get_or_create_user,
@@ -18,64 +19,30 @@ from Utils.django_utils import (
 )
 from django.core.paginator import Paginator
 from . import forms
+User = get_user_model()
 
 
 class Index(ArgsMixin, TemplateView):
+    template_name = 'blog/base.html'
+
     def get(self, request):
-        self.page = self.get_arg("page")
-        if not self.page:
-            self.page = '1'
-        page = int(self.page) - 1
-        if page < 0:
-            page = 0
-            self.page = '1'
-        records = Updata.objects.values()
-        self.context = []
-        all_shopping = Shopping.objects.values()
-        if len(records) != 0:
-            last_time = time.localtime(float(records[len(records) - 1]['crawl_time']))
-            last_day = last_time.tm_mday
-            for record in records:
-                crawl_time = time.localtime(float(record['crawl_time'])).tm_mday
-                # 展示最后一次抓取当天价格有变化的数据
-                if crawl_time != last_day:
-                    continue
-                for shopping in all_shopping:
-                    if shopping['ident'] == record['ident']:
-                        dict_key = ['ident', 'name', 'link', 'price', 'last_price', 'crawl_time']
-                        tm = str(last_time.tm_year) + "-" + str(last_time.tm_mon) + "-" + str(last_day)
-                        dict_value = [shopping['ident'], shopping['name'], shopping['link'], record['price'],
-                                      record['last_price'], tm]
-                        lists = dict(zip(dict_key, dict_value))
-                        self.context.append(lists)
-        p = Paginator(self.context, 20)
-        page_list = p.page_range
-        if page >= len(page_list):
-            self.page = len(page_list)
-            page = self.page
-        if len(page_list) <= 5:
-            pass
-        elif page <= 2:
-            page_list = page_list[0:5]
-        elif page >= len(page_list) - 2:
-            page_list = page_list[len(page_list) - 5:len(page_list)]
-        else:
-            page_list = [x for x in page_list[page - 2:page + 3] if x > 0]
-        return render_to_response(
-            'blog/base.html',
-            {
-                'context': p.page(self.page),
-                'page_list': page_list,
-                'num_pages': p.num_pages,
-                'page': self.page
-            }
-        )
+        if not request.user.id:
+            return redirect("blog:login")
+        context = self.get_context_data()
+        idents = []
+        context['shopping'] = []
+        all_shopping = Shopping.objects.filter(user_id=request.user.id)
+        for shopping in all_shopping.reverse()[::-1]:
+            if shopping.ident not in idents:
+                idents.append(shopping.ident)
+                context['shopping'].append(shopping)
+        return self.render_to_response(context)
 
 
 class Tool(ArgsMixin, TemplateView):
     def get(self, request):
         ident = self.get_arg("phone_id")
-        records = Updata.objects.values()
+        records = Shopping.objects.values()
         now_time = datetime.datetime.now()
         for record in records:
             if record['ident'] == ident:
@@ -147,17 +114,14 @@ class Register(ArgsMixin, TemplateView):
         if form.is_valid():
             username = form.cleaned_data.get("phone")
             password = form.cleaned_data.get("password")
-            user = get_or_create_user(username)
-            user.set_password(password)
-            partner, created = Partner.objects.get_or_create(
-                phone=username,
-                defaults={
-                    "user": user,
-                    "name": username,
-                }
+            user = User.objects.create_user(
+                username,
+                password=password,
             )
-            partner.password = form.cleaned_data.get("password")
-            partner.save()
+            user.is_active = True
+            user.is_staff = True
+            user.set_password(password)
+            user.save
             return redirect("blog:login")
         context["errors"] = form.errors
         return self.render_to_response(context)
@@ -176,8 +140,14 @@ class Login(ArgsMixin, TemplateView):
         context = self.get_context_data()
         form = forms.LoginForm(request.POST)
         if form.is_valid():
-            request.session['username'] = form.cleaned_data.get('phone')
-            return redirect("blog:spider")
+            phone = form.cleaned_data.get("phone")
+            password = form.cleaned_data.get("password")
+            user = authenticate(username=phone, password=password)
+            if not user:
+                context["errors"] = u"账户密码错误"
+            else:
+                login(request, user)
+                return redirect("blog:spider")
         context["form"] = form
         return self.render_to_response(context)
 
@@ -187,19 +157,22 @@ class Spider(ArgsMixin, TemplateView):
 
     def __init__(self):
         self.proc = None
+        self.conn = MySQLdb.connect(host='127.0.0.1', user='root', passwd='123', db='suning', port=3306, charset='utf8')
+        self.cursor = self.conn.cursor()
 
     def get(self, request):
         context = self.get_context_data()
-        username = request.session.get('username')
         kill = request.GET.get("kill")
-        pid = request.GET.get("pid")
-        if pid:
-            pass
+        lo = request.GET.get("logout")
+        if lo:
+            logout(request)
         if kill:
             self.proc = request.GET.get("proc")
             subprocess.Popen('kill -9 %s' % self.proc, shell=True)
+            self.cursor.execute('DELETE FROM blog_shopping WHERE user_id=%s' % request.user.id)
+            self.conn.commit()
             context["p"] = 0
-        if username:
+        if request.user.is_authenticated():
             form = forms.SpiderForm()
             context['form'] = form
             return self.render_to_response(context)
@@ -209,7 +182,8 @@ class Spider(ArgsMixin, TemplateView):
         context = self.get_context_data()
         form = forms.SpiderForm()
         cycle = request.POST.get("cycle")
-        self.proc = subprocess.Popen('python /home/huwei/suning/suning_web/start.py %s' % cycle, shell=True)
+        urls = request.POST.get("url").replace('\r\n', ',')
+        self.proc = subprocess.Popen('python /home/hw/suning/suning_web/start.py %s %s %s' % (cycle, urls, request.user.id), shell=True)
         context["form"] = form
         context["p"] = 1
         context["proc"] = self.proc.pid

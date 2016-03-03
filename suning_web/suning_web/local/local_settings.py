@@ -2,11 +2,11 @@
 TABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME':'suning',
-        'USER':'root',
-        'PASSWORD':'huwei',
-        'HOST':'',
-        'PORT':'',
+        'NAME': 'suning',
+        'USER': 'root',
+        'PASSWORD': '123',
+        'HOST': '',
+        'PORT': '',
     }
 }
 

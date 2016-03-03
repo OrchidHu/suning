@@ -1,29 +1,36 @@
 <html>
 <head>
 <style>
-    *{margin:0;padding:0}
-
+    *{margin:0;padding:0;list-style:none}
+    body{background:url(/static/blog/images/register.png)}
+    button{width:100px; height:30px;border-radius: 5px; background:#cccccc;}
+    button:hover{background:#778899;color:white;cursor:pointer;}
+    a{text-decoration:none;}
 </style>
 </head>
 <body>
-<form class="form_login" action="." method="post">{% csrf_token %}
-    <div>{{form.phone.label}}:</div>
-        <div>{{form.phone}}</div>
-    {% if form.errors.phone %}
-        <span style="color:red;">{{form.errors.phone}}</span>
-    {% endif %}
-    <div>{{form.password.label}}:</div>
-        <div>{{form.password}}</div>
-    {% if form.errors.password %}
-        <span style="color:red;">{{form.errors.password}}</span>
-    {% endif %}
-    <div>{{form.password2.label}}:</div>
-        <div>{{form.password2}}</div>
-    {% if form.errors.password2 %}
-        <span style="color:red;">{{form.errors.password2}}</span>
-    {% endif %}
-    <div class="confirm_login"><button>注册</button></div>
-</form>
+    <div class="register-pn" style="padding:18% 0 0 45%;">
+        <form class="form_login" action="." method="post">{% csrf_token %}
+            <div>{{form.phone.label}}:</div>
+                <div>{{form.phone}}</div>
+            {% if form.errors.phone %}
+                <span style="color:red;">{{form.errors.phone}}</span>
+            {% endif %}
+            <div>{{form.password.label}}:</div>
+                <div>{{form.password}}</div>
+            {% if form.errors.password %}
+                <span style="color:red;">{{form.errors.password}}</span>
+            {% endif %}
+            <div>{{form.password2.label}}:</div>
+                <div>{{form.password2}}</div>
+            {% if form.errors.password2 %}
+                <span style="color:red;">{{form.errors.password2}}</span>
+            {% endif %}
+            <div style="height:5px"></div>
+            <span class="confirm_register"><button>注册</button></span>&nbsp&nbsp
+            <span class="confirm_login"><a href="{% url 'blog:login' %}">快速登陆</a></span>
+        </form>
+    </div>
 
 </body>
 

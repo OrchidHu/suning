@@ -1,26 +1,35 @@
 <html>
 <head>
 <style>
-    *{margin:0;padding:0}
-
+    *{margin:0;padding:0;list-style:none}
+    body{background:url(/static/blog/images/login.png);}
+    .login-pn{padding:230px;}
+    button{width:120px; height:30px;border-radius: 5px; background:#cccccc;}
+    button:hover{background:#778899;color:white;cursor:pointer;}
+    a{text-decoration:none;}
 </style>
 </head>
 <body>
-<form class="form_login" action="." method="post">
-    <div>{{form.phone.label}}:</div>
-        <div>{{form.phone}}</div>
-    {% if form.errors.phone %}
-        <span style="color:red;">{{form.errors.phone}}</span>
-    {% endif %}
-    <div>{{form.password.label}}:</div>
-        <div>{{form.password}}</div>
-    {% if form.errors.password %}
-        <span style="color:red;">{{form.errors.password}}</span>
-    {% endif %}
-    <span class="confirm_login"><button>登陆</button></span>
-    <span class="confirm_register"><a href="{% url 'blog:register' %}">注册</a></span>
-</form>
-
+    <div class="login-pn" style="padding:21% 0 0 45%;">
+        <form class="form_login" action="." method="post">
+            <div>{{form.phone.label}}:</div>
+                <div>{{form.phone}}</div>
+            {% if form.errors.phone %}
+                <span style="color:red;">{{form.errors.phone}}</span>
+            {% endif %}
+            <div>{{form.password.label}}:</div>
+                <div>{{form.password}}</div>
+            {% if form.errors.password %}
+                <div style="color:red;">{{form.errors.password}}</div>
+            {% endif %}
+            {% if errors %}
+                <div style="color:red;">{{errors}}</div>
+            {% endif %}
+            <div style="height:5px"></div>
+            <span class="confirm_login"><button>登陆</button></span>&nbsp&nbsp&nbsp&nbsp
+            <span class="confirm_register"><a href="{% url 'blog:register' %}">注册</a></span>
+        </form>
+    </div>
 </body>
 
 </html>
