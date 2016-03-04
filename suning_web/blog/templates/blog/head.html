@@ -1,0 +1,31 @@
+<html>
+<head></head>
+<style>
+    button{width:100px; height:30px;border-radius: 5px; background:#cccccc;}
+    button:hover{background:#778899;color:white;cursor:pointer;}
+    *{margin:0;padding:0;list-style:none;text-decoration:none;}
+    .title-pn{font-size:20px;color:white;float:left;width:280px;height:60px;text-align:center;line-height:60px;}
+	.main-box a{color:white; height:60px; float: left;text-decoration: none; line-height: 60px; padding:0px 20px 0px 20px; }
+	.main-box a:link{}
+	.main-box a:visited{}
+	.main-box a:hover{background:#778899;}
+	.main-box a:active{}
+</style>
+<body>
+{% block head %}
+<div style="height:60px;background:#557788;">
+    <span class="title-pn">爬虫监控网站</span>
+
+<span class="main-box">
+	<a id="to-shopping"; href="{% url 'blog:index' %}">商品</a>
+	<a id="to-spider"; href="{% url 'blog:spider' %}">爬虫</a>
+	<a id="to-set" href="#">设置</a>
+</span>
+
+</div>
+
+{% endblock %}
+{% block content %}
+{% endblock %}
+</body>
+</html>

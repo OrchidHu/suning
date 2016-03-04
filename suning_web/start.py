@@ -1,19 +1,16 @@
-import sys
-import re
+# coding:utf8
+import MySQLdb
 import time
-
 import subprocess
 
-urls = sys.argv[2]
-# reg = re.compile(r"([\d]+)")
-# data = re.search(reg, sys.argv[1]).group(1)
-data = int(sys.argv[1])
-user_id = sys.argv[3]
-incre_time = data
-while incre_time % data == 0:
-    proc = subprocess.Popen('scrapy crawl updata -a urls=%s -a user_id=%s' % (urls, user_id), shell=True)
-    if proc.poll() == 0:
-        proc.kill()
-    sys.stdout.flush()
-    incre_time += 1
+while True:
+    conn = MySQLdb.connect(host='127.0.0.1', user='root', passwd='123', db='suning', port=3306, charset='utf8')
+    cursor = conn.cursor()
+    spiders = cursor.execute('SELECT * from blog_spider')
+    if spiders:
+        spiders = cursor.fetchmany(spiders)
+        for spider in spiders:
+            now_time = time.time()
+            if (int(now_time)-int(float(spider[4]))) % int(spider[2]) == 0:
+                subprocess.Popen('scrapy crawl updata -a urls=%s -a user_id=%s' % (spider[1], spider[3]), shell=True)
     time.sleep(1)

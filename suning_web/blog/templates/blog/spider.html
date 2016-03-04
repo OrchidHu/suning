@@ -1,28 +1,40 @@
+{% extends "blog/head.html"%}
+{% block content %}
 <style>
+    #to-spider{background:#558899;}
+    .spider-box{height:140px;padding:50px;}
     .left-able{float:left;}
-    *{margin:0;padding:0}
+    .right-pn{padding:10px 0px 0px 20px;}
+    .run-spider{padding:20px 0px 0px 580px;}
+    .message-pn{padding:0px 0px 0px 50px;}
+    .close-button a{color:blue; height:40px; float: left; text-decoration: none; line-height:40px; background:#228899; margin-up:20px; padding:0px 15px 0px 15px; }
+	.close-button a:link{}
+	.close-button a:visited{}
+	.close-button a:hover{background:#778899;}
+	.close-button a:active{}
+    .running{line-height:40px;font-size:20px; padding-right:20px;}
+    .run-spider{padding:30px 0px 0px 560px;}
+    .image{padding-right:20px;}
 </style>
-<div style="height:60px;background:#778899;">
-    <div style="color:white;padding:16px;">胡伟的网站</div>
-</div>
-<div style="padding:20px 0 0 100px;">
-    <form class="form_login" action="." method="post">
+{% if spider %}
+    <div class="run-spider">
+            <div class="left-able running">已启动...</div>
+            <div class="left-able image"><img src="/static/blog/images/wait.gif" /></div>
+            <div class="left-able close-button"><a href="{% url 'blog:spider' %}?kill=True">{{spider}}</a><div>
+    </div>
+{% else %}
+    <div class="spider-box">
+        <form class="form_login" action="." method="post">
             <div class="left-able">{{form.url}}</div>
-        <div class="left-able">{{form.cycle.label}}:</div>
-            <div>{{form.cycle}}</div>
-        {% if form.errors.cycle %}
-            <span style="color:red;">{{form.errors.cycle}}</span>
-        {% endif %}
-        <div class="confirm_login"><button>抓取</button></div>
-        {% if p %}
-            <span style="color:red;">抓取中.... 进程号{{proc}}</span>
-        {% endif %}
-            <span>{{p}}</span>
-
-    </form>
-</div>
-<a href="{% url 'blog:spider' %}?kill=True&proc={{proc}}">停止</a>
-<a href="{% url 'blog:spider' %}?logout=True">注销</a>
-{% if msg %}
-        <span style="color:red;">{{msg}}</span>
-    {% endif %}
+            <div class="left-able right-pn">{{form.cycle.label}}:</div>
+            <div class="right-pn">{{form.cycle}}</div>
+            <div class="run-spider"><button>启动爬虫</button></div>
+                {% if msg %}
+                <div style="color:red; padding:30px 0px 0px 560px;">{{msg}}</div>
+                {% endif %}
+        </form>
+    </div>
+    <div class="message-pn">注意: 一个网址为一行,最多填写十个网址
+    </div>
+{% endif %}
+{% endblock %}

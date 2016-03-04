@@ -3,13 +3,14 @@ import MySQLdb
 
 import datetime
 from django.contrib.auth import authenticate, get_user_model, login, logout
-import time
+import time, blog.models
 from django.shortcuts import render_to_response, resolve_url, redirect
 from django.views.generic import TemplateView
 import subprocess
 from blog.models import (
-    Updata,
-    Shopping
+    Spider,
+    Shopping,
+
 )
 from Utils.django_utils import (
     get_or_create_user,
@@ -162,18 +163,19 @@ class Spider(ArgsMixin, TemplateView):
 
     def get(self, request):
         context = self.get_context_data()
-        kill = request.GET.get("kill")
-        lo = request.GET.get("logout")
-        if lo:
+        kill_spider = request.GET.get("kill")
+        out = request.GET.get("logout")
+        if out:
             logout(request)
-        if kill:
-            self.proc = request.GET.get("proc")
-            subprocess.Popen('kill -9 %s' % self.proc, shell=True)
+        if kill_spider:
             self.cursor.execute('DELETE FROM blog_shopping WHERE user_id=%s' % request.user.id)
+            self.cursor.execute('DELETE FROM blog_spider WHERE user_id=%s' % request.user.id)
             self.conn.commit()
-            context["p"] = 0
         if request.user.is_authenticated():
             form = forms.SpiderForm()
+            spider = self.cursor.execute('SELECT id FROM suning.blog_spider WHERE user_id=%s' % request.user.id)
+            if spider:
+                context["spider"] = u"关闭"
             context['form'] = form
             return self.render_to_response(context)
         return redirect("blog:login")
@@ -183,8 +185,19 @@ class Spider(ArgsMixin, TemplateView):
         form = forms.SpiderForm()
         cycle = request.POST.get("cycle")
         urls = request.POST.get("url").replace('\r\n', ',')
-        self.proc = subprocess.Popen('python /home/hw/suning/suning_web/start.py %s %s %s' % (cycle, urls, request.user.id), shell=True)
+        context['msg'] = {}
+        if not urls:
+            context['msg'] = u"请填写网址"
+        if len(urls.split(',')) > 10:
+            context['msg'] = u"已超过十个商品"
         context["form"] = form
-        context["p"] = 1
-        context["proc"] = self.proc.pid
+        if not context['msg']:
+            spider = blog.models.Spider.objects.create(user_id=request.user.id)
+            spider.url = urls
+            spider.cycle = cycle
+            spider.start_time = time.time()
+            spider.save()
+        excise_spider = self.cursor.execute('SELECT * FROM blog_spider WHERE user_id=%s' % request.user.id)
+        if excise_spider:
+            context["spider"] = u"关闭"
         return self.render_to_response(context)

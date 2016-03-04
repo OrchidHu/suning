@@ -8,8 +8,7 @@ register = template.Library()
 def formatTime(t):
     if not t:
         return ""
-    T = time.localtime(float(t))
-    strT = "%s-%s-%s %s:%s" % (T.tm_year, T.tm_mon, T.tm_mday, T.tm_hour, T.tm_min)
+    x = time.localtime(float(t))
+    strT = time.strftime('%Y-%m-%d %H:%M:%S', x)
     return strT
-register.filter('formatTime', formatTime)
 

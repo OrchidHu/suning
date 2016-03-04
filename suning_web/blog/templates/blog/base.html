@@ -1,9 +1,7 @@
-
+{% extends "blog/head.html"%}
+{% block content %}
 {% load myfilter %}
-<!DOCTYPE html>
-<html>
 <style>
-body{ font-size:12px;}
 .box{width:1200px; float:left;}
 ul,body,dd,li{ list-style:none;
 margin:0;padding:0; }
@@ -20,16 +18,7 @@ margin:0;padding:0; }
 .prompt_word { display:inline-block; color: #555;}
 .current {padding:5px 10px 5px 12px; border:1px solid #CCC; display:inline-block; text-decoration:none; background:#CCC;}
 </style>
-<head>
-	<title>Page Title</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="description" content="Description" />
-</head>
-<body>
-	<header>
-		<nav>
-		</nav>			
-	</header>
+
 	 </h1>
 	 {% if shopping|length >= 1 %}
   	{% for em in shopping %}
@@ -113,10 +102,6 @@ margin:0;padding:0; }
 		{% endif %}
 
 	</div>
-	
-	<footer>
-	</footer>
 
-</body>
+{% endblock %}
 
-</html>
