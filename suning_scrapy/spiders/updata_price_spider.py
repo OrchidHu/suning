@@ -41,7 +41,8 @@ class MySpider(scrapy.Spider):
         price = re.search(r'"price":"([\d]+.[\d]+)', response.body)
         if price:
             price = price.group(1)
-            datas = self.cursor.execute('SELECT id,price FROM blog_shopping WHERE ident=%s AND user_id=%s' % (item['ident'], item['user_id']))
+            datas = self.cursor.execute(
+                'SELECT id,price FROM blog_shopping WHERE ident=%s AND user_id=%s' % (item['ident'], item['user_id']))
             item['price'] = price
             if datas:
                 datas = self.cursor.fetchmany(datas)[-1:]
@@ -53,7 +54,8 @@ class MySpider(scrapy.Spider):
                     else:
                         item['ch_price'] = 'down'
                     yield item
-                self.cursor.execute("UPDATE suning.blog_shopping SET crawl_time=%s WHERE ID=%s"%(time.time(), data_id))
+                self.cursor.execute(
+                    "UPDATE suning.blog_shopping SET crawl_time=%s WHERE ID=%s" % (time.time(), data_id))
                 self.conn.commit()
             else:
                 item['ch_price'] = 'stable'
