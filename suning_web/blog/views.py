@@ -199,7 +199,7 @@ class Spider(ArgsMixin, TemplateView):
             spider = blog.models.Spider.objects.create(user_id=request.user.id)
             spider.url = urls
             spider.cycle = cycle
-            spider.start_time = time.time()+    2
+            spider.start_time = time.time()
             spider.save()
         excise_spider = self.cursor.execute('SELECT * FROM blog_spider WHERE user_id=%s' % request.user.id)
         if excise_spider:

@@ -11,6 +11,6 @@ while True:
         spiders = cursor.fetchmany(spiders)
         for spider in spiders:
             now_time = time.time()
-            if (int(now_time)-int(float(spider[4]))) % int(spider[2]) == 0:
+            if (int(now_time)-int(float(spider[3]))) % int(spider[2]) == 0:
                 subprocess.Popen('scrapy crawl updata -a urls=%s -a user_id=%s' % (spider[1], spider[4]), shell=True)
     time.sleep(1)
