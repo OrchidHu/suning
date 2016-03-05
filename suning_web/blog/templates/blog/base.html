@@ -60,7 +60,9 @@ margin:0;padding:0; }
  	 </div> 
 {% endfor %}
 {% else %}
-
+<div style="color:#bbbfff ;font-size:28px;padding:40px 0px 0px 80px;">暂无监控任何商品
+<span style="color:#bbbfff ;font-size:18px;"><a href="{% url 'blog:spider' %}">编辑爬虫</a></span>
+</div>
 
    {% endif %}
 
