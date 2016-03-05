@@ -10,7 +10,7 @@
 	.main-box a:visited{}
 	.main-box a:hover{background:#778899;}
 	.main-box a:active{}
-	.logout a{color:white; font-size:16px;padding:20px 0px 0px 70%;}
+	.logout{color:#aabb44; font-size:16px;padding:20px 0px 0px 80%;}
 </style>
 {% block head %}
 <div style="height:60px;background:#557788;">
@@ -21,7 +21,7 @@
 	<a id="to-spider"; href="{% url 'blog:spider' %}">爬虫</a>
 	<a id="to-set" href="#">设置</a>
 </span>
-	<p class="logout" style="color:white; font-size:16px;padding:20px 0px 0px 70%;"><a href="{% url 'blog:logout' %}">退出登陆</a></p>
+	<p class="logout">{{request.user.username}}&nbsp&nbsp&nbsp&nbsp<a style="color:white; font-size:16px;" href="{% url 'blog:logout' %}">退出登陆</a></p>
 </div>
 {% endblock %}
 <body>
