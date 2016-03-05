@@ -13,8 +13,9 @@
 	.close-button a:hover{background:#778899;}
 	.close-button a:active{}
     .running{line-height:40px;font-size:20px; padding-right:20px;}
-    .run-spider{padding:30px 0px 0px 560px;}
-    .image{padding-right:20px;}
+    .run-spider{padding:30px 0px 0px 160px;}
+    .start-spider{padding:40px 0px 0px 560px;}
+    .image{padding-right:40px;}
 </style>
 {% if spider %}
     <div class="run-spider">
@@ -28,7 +29,7 @@
             <div class="left-able">{{form.url}}</div>
             <div class="left-able right-pn">{{form.cycle.label}}:</div>
             <div class="right-pn">{{form.cycle}}</div>
-            <div class="run-spider"><button>启动爬虫</button></div>
+            <div class="start-spider"><button>启动爬虫</button></div>
                 {% if msg %}
                 <div style="color:red; padding:30px 0px 0px 560px;">{{msg}}</div>
                 {% endif %}

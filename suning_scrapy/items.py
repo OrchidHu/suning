@@ -17,3 +17,4 @@ class SuningItem(scrapy.Item):
     user_id = scrapy.Field()
     ch_price = scrapy.Field()
     image_url = scrapy.Field()
+    url = scrapy.Field()

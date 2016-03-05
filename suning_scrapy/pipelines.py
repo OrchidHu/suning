@@ -64,7 +64,8 @@ class SuningPipeline(object):
         user_id = item['user_id']
         ch_price = item['ch_price']
         image_url = item['image_url']
-        self.cursor.execute('INSERT INTO blog_shopping(ident,name,price,crawl_time,user_id,ch_price,image_url)VALUES(%s,%s,%s,%s,%s,%s,%s)', (ident, name, price, crawl_time, user_id, ch_price, image_url))
+        url = item['url']
+        self.cursor.execute('INSERT INTO blog_shopping(ident,name,price,crawl_time,user_id,ch_price,image_url,url)VALUES(%s,%s,%s,%s,%s,%s,%s,%s)', (ident, name, price, crawl_time, user_id, ch_price, image_url, url))
         self.conn.commit()
         return item
 

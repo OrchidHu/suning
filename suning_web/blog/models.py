@@ -59,6 +59,10 @@ class Shopping(models.Model):
         verbose_name=u"图片",
         max_length=500
     )
+    url = models.CharField(
+        verbose_name=u"商品网址",
+        max_length=500
+    )
 
     def __unicode__(self):
         return self.name

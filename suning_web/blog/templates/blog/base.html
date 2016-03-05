@@ -2,6 +2,7 @@
 {% block content %}
 {% load myfilter %}
 <style>
+body{font-size:14px;}
 .box{width:1200px; float:left;}
 ul,body,dd,li{ list-style:none;
 margin:0;padding:0; }
@@ -24,24 +25,27 @@ margin:0;padding:0; }
   	{% for em in shopping %}
   	 <div class="box" style="padding:5px 0px 0px 100px;">
 		 <div style="width:120px;float:left;padding:15px;"><img src={{em.image_url}}></img></div>
-		 <div style="width:600px;float:left; padding:10px 10px 10px 0px;">
-			 <div style="width:600px;height:36px;float:left;font-size:16px;">{{em.name}}</div>
-			 <div style="width:600px;float:left;">
+		 <div style="width:800px;float:left; padding:30px 10px 10px 0px;">
+			 <div style="color:#bbgg55; width:800px;height:36px;float:left;font-size:16px;">{{em.name}}</div>
+			 <div style="width:800px;float:left;">
 				 <div style="width:50px;height:30px;float:left;padding:6px 0px 0px 0px;">当前价:</div>
-				 <div style="width:120px;height:36px;float:left;vertical-align:bottom;font-size:18px;color:red;"><i>¥</i>  {{em.price}}</div>
-				 <div style="width:400px;height:30px;float:left;padding:6px 0px 0px 0px;">
-						 {% if em.ch_price == 'stable' %}价格未变
-						 {% elif em.ch_price == 'up' %}价格上涨
-						 {% else %}价格下降
+				 <div style="width:120px;height:36px;float:left;line-height:30px;font-size:18px;color:red;"><i>¥</i>  {{em.price}}</div>
+				 <div style="width:100px;height:30px;float:left;padding:6px 0px 0px 0px;">
+						 {% if em.ch_price == 'stable' %}<p>价格未变</p>
+						 {% elif em.ch_price == 'up' %}<p style="color:#f60;">价格上涨</p>
+						 {% else %}<p style="color:green"> 价格下降</p>
 						 {% endif %}
+				 </div>
+				 <div style="width:200px;height:30px;float:left;padding:6px 0px 0px 0px;">
+					 <a href="{{em.url}}" style="font-size:16px;">立即到官网购买</a>
 				 </div>
 			 </div>
 
 			 <div style="width:60px; height:36px;float:left;">更新时间:</div>
-			 <div style="width:500px;height:36px;float:left;">{{em.crawl_time|formatTime}}</div>
+			 <div style="width:160px;height:36px;float:left;line-height:24px;">{{em.crawl_time|formatTime}}</div>
 			 <!-- <div style="width:50px;"><img alt="" title="" src="/static/blog/images/tooldown.png"/> </div> -->
 
-			 <div style="width:80px;float:left">查看历史价格:</div>
+			 <div style="width:100px;float:left">查看历史价格:</div>
 			 <div style="width:100px;float:left;">
 				 <span style="float:right;padding-right:80px;"><a href="tool/?phone_id={{em.ident}}">
       	 		 <img alt="" title="" src="/static/blog/images/toolhistory.png"/></a></span>

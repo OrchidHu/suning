@@ -24,6 +24,7 @@ class MySpider(scrapy.Spider):
         ident = re.search(r'([\d]{9}).html', response.url).group(1)
         item = SuningItem()
         item['ident'] = ident
+        item['url'] = response.url
         item['user_id'] = self.user_id
         item['name'] = response.xpath('//div[@class="proinfo-title"]/h1/text()').extract()[0]
         item['crawl_time'] = time.time()
