@@ -153,6 +153,13 @@ class Login(ArgsMixin, TemplateView):
         return self.render_to_response(context)
 
 
+class Logout(ArgsMixin, TemplateView):
+
+    def get(self, request):
+        logout(request)
+        return redirect("blog:login")
+
+
 class Spider(ArgsMixin, TemplateView):
     template_name = "blog/spider.html"
 
@@ -164,9 +171,6 @@ class Spider(ArgsMixin, TemplateView):
     def get(self, request):
         context = self.get_context_data()
         kill_spider = request.GET.get("kill")
-        out = request.GET.get("logout")
-        if out:
-            logout(request)
         if kill_spider:
             self.cursor.execute('DELETE FROM blog_shopping WHERE user_id=%s' % request.user.id)
             self.cursor.execute('DELETE FROM blog_spider WHERE user_id=%s' % request.user.id)

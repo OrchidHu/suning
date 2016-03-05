@@ -25,6 +25,11 @@ urlpatterns = [
         name='login'
     ),
     url(
+        r'^logout/$',
+        views.Logout.as_view(),
+        name='logout'
+    ),
+    url(
         r'^spider/$',
         views.Spider.as_view(),
         name='spider'
