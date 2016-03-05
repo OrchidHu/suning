@@ -60,3 +60,4 @@ class MySpider(scrapy.Spider):
             else:
                 item['ch_price'] = 'stable'
                 yield item
+                yield item
