@@ -21,7 +21,7 @@ margin:0;padding:0; }
 </style>
 
 	 </h1>
-	 {% if shopping|length >= 1 %}
+{% if shopping|length >= 1 %}
   	{% for em in shopping %}
   	 <div class="box" style="padding:5px 0px 0px 100px;">
 		 <div style="width:120px;float:left;padding:15px;"><img src={{em.image_url}}></img></div>
@@ -58,7 +58,9 @@ margin:0;padding:0; }
         <input type="submit" value="监控">
       </form> -->
  	 </div> 
-  	{% endfor %}
+{% endfor %}
+{% else %}
+
 
    {% endif %}
 

@@ -41,7 +41,7 @@ class MySpider(scrapy.Spider):
         price = re.search(r'"price":"([\d]+.[\d]+)', response.body)
         if price:
             price = price.group(1)
-            datas = self.cursor.execute('SELECT id,price FROM blog_shopping WHERE ident=%s' % item['ident'])
+            datas = self.cursor.execute('SELECT id,price FROM blog_shopping WHERE ident=%s AND user_id=%s' % (item['ident'], item['user_id']))
             item['price'] = price
             if datas:
                 datas = self.cursor.fetchmany(datas)[-1:]
