@@ -148,7 +148,7 @@ class Login(ArgsMixin, TemplateView):
                 context["errors"] = u"账户密码错误"
             else:
                 login(request, user)
-                return redirect("blog:spider")
+                return redirect("blog:index")
         context["form"] = form
         return self.render_to_response(context)
 
