@@ -28,7 +28,7 @@ class MySpider(scrapy.Spider):
         item['user_id'] = self.user_id
         item['name'] = response.xpath('//div[@class="proinfo-title"]/h1/text()').extract()[0]
         item['crawl_time'] = time.time()
-        item['image_url'] = "http://image5.suning.cn/b2c/catentries/000000000%s_1_120x120.jpg" % ident
+        item['image_url'] = "http://image5.suning.cn/b2c/catentries/000000000%s_1_100x100.jpg" % ident
         price_url = 'http://ds.suning.cn/ds/prices/000000000' + ident + '-9265--1-SES.product.priceCenterCallBack.jsonp'
         yield scrapy.Request(url=price_url, meta={'item': item}, callback=self.parse_price)
         is_exist = self.cursor.execute('SELECT * FROM blog_comment WHERE ident=%s' % ident)

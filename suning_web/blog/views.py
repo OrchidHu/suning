@@ -37,6 +37,7 @@ class Index(ArgsMixin, TemplateView):
             if shopping.ident not in idents:
                 idents.append(shopping.ident)
                 context['shopping'].append(shopping)
+        context['username'] = request.user.username
         return self.render_to_response(context)
 
 
@@ -181,6 +182,7 @@ class Spider(ArgsMixin, TemplateView):
             if spider:
                 context["spider"] = u"关闭"
             context['form'] = form
+            context['username'] = request.user.username
             return self.render_to_response(context)
         return redirect("blog:login")
 
@@ -204,4 +206,5 @@ class Spider(ArgsMixin, TemplateView):
         excise_spider = self.cursor.execute('SELECT * FROM blog_spider WHERE user_id=%s' % request.user.id)
         if excise_spider:
             context["spider"] = u"关闭"
+        context['username'] = request.user.username
         return self.render_to_response(context)
