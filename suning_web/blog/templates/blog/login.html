@@ -4,9 +4,10 @@
     *{margin:0;padding:0;list-style:none}
     body{background:url(/static/blog/images/login.png);}
     .login-pn{padding:230px;}
-    button{width:120px; height:30px;border-radius: 5px; background:#cccccc;}
+    button{width:80px; height:30px;border-radius: 5px; background:#cccccc;}
     button:hover{background:#778899;color:white;cursor:pointer;}
     a{text-decoration:none;}
+    li{font-size:12px;}
 </style>
 </head>
 <body>
@@ -26,7 +27,7 @@
                 <div style="color:red;">{{errors}}</div>
             {% endif %}
             <div style="height:5px"></div>
-            <span class="confirm_login"><button>登陆</button></span>&nbsp&nbsp&nbsp&nbsp
+            <span class="confirm_login"><button>登陆</button></span>&nbsp&nbsp
             <span class="confirm_register"><a href="{% url 'blog:register' %}">注册</a></span>
         </form>
     </div>

@@ -3,13 +3,14 @@
 <style>
     *{margin:0;padding:0;list-style:none}
     body{background:url(/static/blog/images/register.png)}
-    button{width:100px; height:30px;border-radius: 5px; background:#cccccc;}
+    button{width:80px; height:30px;border-radius: 5px; background:#cccccc;}
     button:hover{background:#778899;color:white;cursor:pointer;}
     a{text-decoration:none;}
+    li{font-size:12px;}
 </style>
 </head>
 <body>
-    <div class="register-pn" style="padding:18% 0 0 45%;">
+    <div class="register-pn" style="padding:18.5% 0 0 46%;">
         <form class="form_login" action="." method="post">{% csrf_token %}
             <div>{{form.phone.label}}:</div>
                 <div>{{form.phone}}</div>
