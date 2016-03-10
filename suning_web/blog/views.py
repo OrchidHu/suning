@@ -1,24 +1,18 @@
 # coding:utf-8
 import MySQLdb
 
-import datetime
+import datetime, time
 from django.contrib.auth import authenticate, get_user_model, login, logout
-import time, blog.models
-from django.shortcuts import render_to_response, resolve_url, redirect
+import time, models
+from django.shortcuts import render_to_response, redirect
 from django.views.generic import TemplateView
-import subprocess
-from blog.models import (
-    Spider,
-    Shopping,
 
+from blog.models import (
+    Shopping,
 )
 from Utils.django_utils import (
-    get_or_create_user,
     ArgsMixin,
-    JsonError,
-    JsonSuccess,
 )
-from django.core.paginator import Paginator
 from . import forms
 User = get_user_model()
 
@@ -33,6 +27,10 @@ class Index(ArgsMixin, TemplateView):
         idents = []
         context['shopping'] = []
         all_shopping = Shopping.objects.filter(user_id=request.user.id)
+        if not all_shopping.first():
+            spider = models.Spider.objects.filter(user_id=request.user.id)
+            if spider:
+                context['error_url'] = 'error_url'
         for shopping in all_shopping.reverse()[::-1]:
             if shopping.ident not in idents:
                 idents.append(shopping.ident)
@@ -187,24 +185,40 @@ class Spider(ArgsMixin, TemplateView):
         return redirect("blog:login")
 
     def post(self, request):
-        context = self.get_context_data()
+        self.context = self.get_context_data()
         form = forms.SpiderForm()
-        cycle = request.POST.get("cycle")
-        urls = request.POST.get("url").replace('\r\n', ',')
-        context['msg'] = {}
-        if not urls:
-            context['msg'] = u"请填写网址"
-        if len(urls.split(',')) > 10:
-            context['msg'] = u"已超过十个商品"
-        context["form"] = form
-        if not context['msg']:
-            spider = blog.models.Spider.objects.create(user_id=request.user.id)
+        cycle = self.get_arg("cycle")
+        urls = self.get_urls()
+        email = self.get_email()
+        self.context["form"] = form
+        if not self.context['msg']:
+            spider = models.Spider.objects.create(user_id=request.user.id)
             spider.url = urls
+            spider.email = email
             spider.cycle = cycle
-            spider.start_time = time.time()+2
+            spider.start_time = time.time()+1
             spider.save()
         excise_spider = self.cursor.execute('SELECT * FROM blog_spider WHERE user_id=%s' % request.user.id)
         if excise_spider:
-            context["spider"] = u"关闭"
-        context['username'] = request.user.username
-        return self.render_to_response(context)
+            self.context["spider"] = u"关闭"
+        self.context['username'] = request.user.username
+        return self.render_to_response(self.context)
+
+    def get_email(self):
+        email_select = self.get_arg("email-select")
+        email = self.get_arg("email")
+        if email_select == "yes":
+            self.context['selected'] = 'yes'
+            if not email:
+                self.context['email_er'] = u"请填写邮箱地址"
+        return email
+
+    def get_urls(self):
+        urls = self.get_arg("url").replace('\r\n', ',')
+        self.context['msg'] = {}
+        if not urls:
+            self.context['msg'] = u"请填写网址"
+        if len(urls.split(',')) > 10:
+            self.context['msg'] = u"已超过十个商品"
+        return urls
+

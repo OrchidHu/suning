@@ -97,7 +97,7 @@ class SpiderForm(forms.ModelForm):
     class Meta:
         model = Spider
         fields = (
-            'cycle', 'url'
+            'cycle', 'url', 'email'
         )
         error_messages = {
             'required': u"请选择间隔抓取时间"

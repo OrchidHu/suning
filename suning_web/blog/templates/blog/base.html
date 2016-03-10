@@ -62,10 +62,16 @@
  	 </div> 
 {% endfor %}
 {% else %}
-<div style="color:#bbbfff ;font-size:28px;padding:40px 0px 0px 80px;">暂无监控任何商品
-<span style="color:#bbbfff ;font-size:18px;"><a href="{% url 'blog:spider' %}">编辑爬虫</a></span>
-</div>
-
+  {% if error_url %}
+		<div style="color:#bbbfff ;font-size:28px;padding:40px 0px 0px 80px;">暂时没有搜集到商品
+		<span style="color:#bbbfff ;font-size:18px;"><a href="{% url 'blog:index' %}">刷新</a></span>
+		</div>
+		<div style="color:red ;font-size:18px;padding:40px 0px 0px 80px;">如果尝试刷新多次无效,可能是提供的网址不正确</div>
+	{% else %}
+	 	<div style="color:#bbbfff ;font-size:28px;padding:40px 0px 0px 80px;">暂无监控任何商品
+		<span style="color:#bbbfff ;font-size:18px;"><a href="{% url 'blog:spider' %}">编辑爬虫</a></span>
+		</div>
+  {% endif %}
    {% endif %}
 
 

@@ -5,6 +5,10 @@ import time
 import scrapy
 import MySQLdb
 from suning_scrapy.items import SuningItem
+from email.header import Header
+from email.mime.text import MIMEText
+from email.utils import parseaddr, formataddr
+import smtplib
 
 
 class MySpider(scrapy.Spider):
@@ -42,18 +46,25 @@ class MySpider(scrapy.Spider):
         if price:
             price = price.group(1)
             datas = self.cursor.execute(
-                'SELECT id,price FROM blog_shopping WHERE ident=%s AND user_id=%s' % (item['ident'], item['user_id']))
+                'SELECT id,price FROM blog_shopping WHERE ident=%s AND user_id=%s' % (item['ident'], item['user_id'])
+            )
             item['price'] = price
             if datas:
                 datas = self.cursor.fetchmany(datas)[-1:]
                 data_id = datas[0][0]
                 old_price = datas[0][1]
                 if price != old_price:
-                    if price > old_price.pop():
+                    if price > old_price:
                         item['ch_price'] = 'up'
                     else:
                         item['ch_price'] = 'down'
                     yield item
+                    email = self.cursor.execute(
+                        'SELECT email FROM blog_spider WHERE user_id=%s' % item['user_id']
+                    )
+                    if email:
+                        email = self.cursor.fetchmany(email)[-1:][0][0]
+                        self.send_email(email)
                 self.cursor.execute(
                     "UPDATE suning.blog_shopping SET crawl_time=%s WHERE ID=%s" % (time.time(), data_id))
                 self.conn.commit()
@@ -61,3 +72,28 @@ class MySpider(scrapy.Spider):
                 item['ch_price'] = 'stable'
                 yield item
                 yield item
+
+    def send_email(self, email):
+        from_addr = '826446178@qq.com'
+        password = "glycfmgymnylbbjd"
+        to_addr = "%s" % email
+        url = 'http://121.42.174.207/blog/'
+        msg = MIMEText('您好!\n       您特定的商品有价格变动,请点击下方的链接查看:\n       %s' % url, 'plain', 'utf-8')
+        msg['From'] = self._format_addr(u'小虫子 <%s>' % from_addr)
+        msg['To'] = self._format_addr(u'管理员 <%s>' % to_addr)
+        msg['Subject'] = Header(u'商品价格变动通知', 'utf-8').encode()
+
+        smtp_server = 'smtp.qq.com'
+        smtp_port = 587
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()
+        #server.set_debuglevel(1)
+        server.login(from_addr, password)
+        server.sendmail(from_addr, [to_addr], msg.as_string())
+        server.quit()
+
+    def _format_addr(self, s):
+            name, addr = parseaddr(s)
+            return formataddr(( \
+                Header(name, 'utf-8').encode(), \
+                addr.encode('utf-8') if isinstance(addr, unicode) else addr))

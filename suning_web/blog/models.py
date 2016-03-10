@@ -89,7 +89,6 @@ class Spider(models.Model):
         (3600*48, u"两天"),
         (3600*144, u"一周")
     )
-
     user = models.ForeignKey(
         User,
         related_name="pa_spider",
@@ -98,22 +97,24 @@ class Spider(models.Model):
         null=True,
         blank=True
     )
-
     url = models.TextField(
         max_length=5000,
         null=True
     )
-
     cycle = models.CharField(
         verbose_name=u'抓取间隔时间',
         max_length=50,
         choices=TIME,
         default=3600*24
     )
-
     start_time = models.CharField(
         verbose_name=u'开始时间',
         max_length=20,
         null=True
+    )
+    email = models.EmailField(
+        verbose_name=u'邮件通知地址',
+        max_length=100,
+        null=True,
     )
 

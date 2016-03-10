@@ -4,7 +4,7 @@
     #to-spider{background:#558899;}
     .spider-box{height:140px;padding:50px;}
     .left-able{float:left;}
-    .right-pn{padding:10px 0px 0px 20px;}
+    .right-pn{padding:2px 0px 0px 20px;}
     .run-spider{padding:20px 0px 0px 580px;}
     .message-pn{padding:0px 0px 0px 50px;}
     .close-button a{color:white; height:40px; float: left; text-decoration: none; line-height:40px; background:#228899; margin-up:20px; padding:0px 15px 0px 15px; }
@@ -14,9 +14,18 @@
 	.close-button a:active{}
     .running{line-height:40px;font-size:20px; padding-right:20px;}
     .run-spider{padding:30px 0px 0px 160px;}
-    .start-spider{padding:40px 0px 0px 340px;}
+    .start-spider{padding:4px 0px 0px 340px;}
     .image{padding-right:40px;}
 </style>
+<script type="text/javascript"  language="javascript" src="/static/blog/js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+$(function(){
+}).on('click', '#nn', function(){
+  $('#show-pn').show();
+}).on('click', '#pp', function(){
+  $('#show-pn').hide();
+})
+</script>
 {% if spider %}
     <div class="run-spider">
             <div class="left-able running">已启动...</div>
@@ -29,9 +38,19 @@
             <div class="left-able">{{form.url}}</div>
             <div class="left-able right-pn">{{form.cycle.label}}:</div>
             <div class="right-pn">{{form.cycle}}</div>
+            <div>变价后是否邮件提醒</div>
+            <p id="pp"><input type="radio" value="no" name="email-select">否</p>
+            <p id="nn"><input type="radio" value="yes"checked {% if selected %}checked{% endif %} name="email-select">是</p>
+            <div id="show-pn">
+                <div class="">{{form.email.label}}</div>
+                <div class="email-pn">{{form.email}}</div>
+                {% if email_er %}
+                <div style="color:red; padding:2px 0px 0px 340px;">{{email_er}}</div>
+                {% endif %}
+            </div>
             <div class="start-spider"><button>启动爬虫</button></div>
                 {% if msg %}
-                <div style="color:red; padding:30px 0px 0px 340px;">{{msg}}</div>
+                <div style="color:red; padding:2px 0px 0px 340px;">{{msg}}</div>
                 {% endif %}
         </form>
     </div>
