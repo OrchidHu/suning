@@ -191,7 +191,7 @@ class Spider(ArgsMixin, TemplateView):
         urls = self.get_urls()
         email = self.get_email()
         self.context["form"] = form
-        if not self.context['msg']:
+        if not self.context['msg'] and not self.context['email_er']:
             spider = models.Spider.objects.create(user_id=request.user.id)
             spider.url = urls
             spider.email = email

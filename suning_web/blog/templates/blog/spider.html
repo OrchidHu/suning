@@ -36,12 +36,13 @@ $(function(){
     <div class="spider-box">
         <form class="form_login" action="." method="post">
             <div class="left-able">{{form.url}}</div>
-            <div class="left-able right-pn">{{form.cycle.label}}:</div>
-            <div class="right-pn">{{form.cycle}}</div>
-            <div>变价后是否邮件提醒</div>
-            <p id="pp"><input type="radio" value="no" name="email-select">否</p>
-            <p id="nn"><input type="radio" value="yes"checked {% if selected %}checked{% endif %} name="email-select">是</p>
-            <div id="show-pn">
+            <div style="height:180px;width:20px;float:left;"></div>
+            <div class="left-able ">{{form.cycle.label}}:</div>
+            <div>{{form.cycle}}</div>
+            <div style="color:#aaaa00;">变价后是否邮件提醒</div>
+            <p class="right-png" id="pp" style="float:left;"><input type="radio" value="no" name="email-select">否&nbsp&nbsp&nbsp&nbsp</p>
+            <p class="right-png" id="nn"><input type="radio" value="yes"checked {% if selected %}checked{% endif %} name="email-select">是</p>
+            <div id="show-pn" class="right-pn">
                 <div class="">{{form.email.label}}</div>
                 <div class="email-pn">{{form.email}}</div>
                 {% if email_er %}
