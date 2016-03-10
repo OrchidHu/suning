@@ -113,7 +113,7 @@ class Spider(models.Model):
         null=True
     )
     email = models.EmailField(
-        verbose_name=u'邮件通知地址',
+        verbose_name=u'邮件通知地址:',
         max_length=100,
         null=True,
     )
