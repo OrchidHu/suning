@@ -19,6 +19,11 @@
 	}
 	.prompt_word { display:inline-block; color: #555;}
 	.current {padding:5px 10px 5px 12px; border:1px solid #CCC; display:inline-block; text-decoration:none; background:#CCC;}
+	.close-button a{color:white; height:40px; text-decoration: none; line-height:40px; background:#228899; margin-up:20px; padding:6px 15px 6px 15px; }
+	.close-button a:link{}
+	.close-button a:visited{}
+	.close-button a:hover{background:#778899;}
+	.close-button a:active{}
 </style>
 
 	 </h1>
@@ -63,8 +68,8 @@
 {% endfor %}
 {% else %}
   {% if error_url %}
-		<div style="color:#bbbfff ;font-size:28px;padding:40px 0px 0px 80px;">暂时没有搜集到商品
-		<span style="color:#bbbfff ;font-size:18px;"><a href="{% url 'blog:index' %}">刷新</a></span>
+		<div style="color:#bbbfff ;font-size:28px;padding:40px 0px 0px 80px;">暂时没有搜集到商品&nbsp&nbsp
+		<span class="close-button" style="color:#bbbfff ;font-size:18px;"><a href="{% url 'blog:index' %}">刷新</a></span>
 		</div>
 		<div style="color:red ;font-size:18px;padding:40px 0px 0px 80px;">如果尝试刷新多次无效,可能是提供的网址不正确</div>
 	{% else %}

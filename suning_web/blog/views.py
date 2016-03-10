@@ -205,6 +205,7 @@ class Spider(ArgsMixin, TemplateView):
         return self.render_to_response(self.context)
 
     def get_email(self):
+        self.context['email_er'] = {}
         email_select = self.get_arg("email-select")
         email = self.get_arg("email")
         if email_select == "yes":

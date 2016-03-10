@@ -7,7 +7,7 @@
     .right-pn{padding:2px 0px 0px 20px;}
     .run-spider{padding:20px 0px 0px 580px;}
     .start-spider{padding:10px 0px 0px 0px;}
-    .message-pn{padding:5px 0px 0px 50px;}
+    .message-pn{padding:0px 0px 0px 50px;}
     .close-button a{color:white; height:40px; float: left; text-decoration: none; line-height:40px; background:#228899; margin-up:20px; padding:0px 15px 0px 15px; }
 	.close-button a:link{}
 	.close-button a:visited{}
@@ -16,6 +16,9 @@
     .running{line-height:40px;font-size:20px; padding-right:20px;}
     .run-spider{padding:30px 0px 0px 160px;}
     .image{padding-right:40px;}
+    #id_url{width:550px;height:185px;}
+    #id_email{width:170px;height:25px;}
+
 </style>
 <script type="text/javascript"  language="javascript" src="/static/blog/js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
@@ -35,7 +38,7 @@ $(function(){
 {% else %}
     <div class="spider-box">
         <form class="form_login" action="." method="post">
-            <div class="left-able change_red">{{form.url}}</div>
+            <div class="left-able url_red">{{form.url}}</div>
             <div style="height:180px;width:20px;float:left;"></div>
             <div class="left-able ">{{form.cycle.label}}:</div>
             <div>{{form.cycle}}</div>
@@ -46,6 +49,7 @@ $(function(){
                 <div class="">{{form.email.label}}</div>
                 <div class="email-pn">{{form.email}}</div>
                 {% if email_er %}
+                <style> #id_email{border:1px solid red;}</style>
                 <div style="color:red;">{{email_er}}</div>
                 {% endif %}
             </div>
@@ -55,7 +59,7 @@ $(function(){
     </div>
                 {% if msg %}
                 <div class="message-pn" style="color:red;">{{msg}}</div>
-                <style> .change_red{border:1px solid red;}</style>
+                <style> .url_red{border:1px solid red;}</style>
                 {% endif %}
     <div class="message-pn">注意: 一个网址为一行,最多填写十个网址
     </div>

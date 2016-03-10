@@ -2,15 +2,26 @@
 <head>
 <style>
     *{margin:0;padding:0;list-style:none}
-    body{background:url(/static/blog/images/register.png)}
-    button{width:80px; height:30px;border-radius: 5px; background:#cccccc;}
+    body{
+        background:url(/static/blog/images/background.png) no-repeat;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+    button{width:120px; height:30px;border-radius: 5px; background:#cccccc;}
     button:hover{background:#778899;color:white;cursor:pointer;}
     a{text-decoration:none;}
     li{font-size:12px;}
+    #id_phone{width:200px;height:25px;}
+    #id_password{width:200px;height:25px;}
+    #id_password2{width:200px;height:25px;}
+    .register-pn{
+        margin:16% 0 0 30%;background: url(/static/blog/images/login-register.png) no-repeat;
+        height: 430px;width: 500px; padding:22px 0px 0px 200px;
+    }
 </style>
 </head>
 <body>
-    <div class="register-pn" style="padding:18.5% 0 0 46%;">
+    <div class="register-pn">
         <form class="form_login" action="." method="post">{% csrf_token %}
             <div>{{form.phone.label}}:</div>
                 <div>{{form.phone}}</div>

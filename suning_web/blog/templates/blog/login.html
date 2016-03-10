@@ -2,16 +2,23 @@
 <head>
 <style>
     *{margin:0;padding:0;list-style:none}
-    body{background:url(/static/blog/images/login.png);}
+    body{background:url(/static/blog/images/background.png) no-repeat;background-size: 100% 100%;}
     .login-pn{padding:230px;}
-    button{width:80px; height:30px;border-radius: 5px; background:#cccccc;}
+    button{width:120px; height:30px;border-radius: 5px; background:#cccccc;}
     button:hover{background:#778899;color:white;cursor:pointer;}
     a{text-decoration:none;}
     li{font-size:12px;}
+    #id_phone{width:200px; height:25px;}
+    #id_password{width:200px; height:25px;}
+    .confirm_login{padding-right:30px;}
+    .login-pn{
+        margin:16% 0 0 30%;background: url(/static/blog/images/login-register.png) no-repeat;
+        height: 430px;width: 500px; padding:42px 0px 0px 200px;
+    }
 </style>
 </head>
 <body>
-    <div class="login-pn" style="padding:21% 0 0 45%;">
+    <div class="login-pn">
         <form class="form_login" action="." method="post">
             <div>{{form.phone.label}}:</div>
                 <div>{{form.phone}}</div>
@@ -27,7 +34,7 @@
                 <div style="color:red;">{{errors}}</div>
             {% endif %}
             <div style="height:5px"></div>
-            <span class="confirm_login"><button>登陆</button></span>&nbsp&nbsp
+            <span class="confirm_login"><button>登陆</button></span>
             <span class="confirm_register"><a href="{% url 'blog:register' %}">注册</a></span>
         </form>
     </div>
