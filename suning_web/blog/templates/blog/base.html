@@ -3,11 +3,9 @@
 {% load myfilter %}
 <style>
     #to-shopping{background:#558899;}
-	body{font-size:12px;}
-	.box{width:1200px; float:left;}
-	ul,body,dd,li{ list-style:none;
-	margin:0;padding:0; }
-	.page{ height:58px; width:600px; float:left; padding-left:200px; text-align:center;}
+	body{font-size:12px; background:#fffff;}
+	.box{float:left;padding:10px 0px 0px 120px;}
+	ul,body,dd,li{ list-style:none;margin:0;padding:0; }
 	.link_block { padding:5px 10px 5px 12px; border:1px solid #CCC; display:inline-block; text-decoration:none; background:#fff;}
 	.link_block:hover{padding:5px 0px px 12px; background: #CCC;}
 	.link_block a:link{text-decoration: none;}
@@ -24,32 +22,34 @@
 	.close-button a:visited{}
 	.close-button a:hover{background:#778899;}
 	.close-button a:active{}
+
 </style>
 
 	 </h1>
 {% if shopping|length >= 1 %}
-<div style="height:10px;"></div>>
+<div style="height:10px;"></div>
+<div style="padding:0px 0px 10px 120px;font-size:16px;">更新时间:&nbsp&nbsp
+	  <span style="color:#F05301; font-size:20px;">{{shopping.0.crawl_time|formatTime}}</span></div>
   	{% for em in shopping %}
-  	 <div class="box" style="padding:0px 0px 0px 120px;">
+  	 <div class="box" >
 		 <div style="width:120px;float:left;padding:0px;"><img src={{em.image_url}}></img></div>
 		 <div style="width:800px;float:left; padding:0px 10px 10px 0px;">
 			 <div style="color:#bbgg55; width:800px;height:36px;float:left;font-size:14px;">{{em.name}}</div>
 			 <div style="width:800px;float:left;">
-				 <div style="width:60px;height:30px;float:left;padding:4px 0px 0px 0px;">当前价:</div>
+				 <div style="width:60px;height:30px;float:left;">当前价:</div>
 				 <div style="width:100px;height:30px;float:left;line-height:20px;font-size:18px;color:red;"><i>¥</i>  {{em.price}}</div>
-				 <div style="width:100px;height:30px;float:left;padding:4px 0px 0px 0px;">
+				 <div style="width:80px;height:30px;float:left;">
 						 {% if em.ch_price == 'stable' %}<p>价格未变</p>
-						 {% elif em.ch_price == 'up' %}<p style="color:#f60;">价格上涨</p>
-						 {% else %}<p style="color:green"> 价格下降</p>
+						 {% elif em.ch_price == 'up' %}<p style="color:#f60;"><img alt="" title="" src="/static/blog/images/toolup.png"/> 价格上涨</p>
+						 {% else %}<p style="color:green;"><img alt="" title="" src="/static/blog/images/tooldown.png"/> 价格下降</p>
 						 {% endif %}
 				 </div>
-				 <div style="width:200px;height:30px;float:left;padding:4px 0px 0px 0px;">
-					 <a href="{{em.url}}" style="font-size:14px;">立即到官网购买</a>
+				 <div style="width:160px;height:30px;float:left;">
+					 <a href="{{em.url}}" style="font-size:14px;">立即购买</a>
 				 </div>
 			 </div>
 
-			 <div style="width:60px; height:46px;float:left;">更新时间:</div>
-			 <div style="width:140px;height:46px;float:left;line-height:18px;">{{em.crawl_time|formatTime}}</div>
+
 			 <!-- <div style="width:50px;"><img alt="" title="" src="/static/blog/images/tooldown.png"/> </div> -->
 
 			 <div style="width:80px;float:left">查看历史价格:</div>
@@ -79,50 +79,6 @@
   {% endif %}
    {% endif %}
 
-
-	<div class="page"; style="width:800px;">
-		{% if context.has_previous %}
-			<div class="link_block">
-				<a href="?page={{ context.previous_page_number }}">
-					&lt;&lt; 上一页
-				</a>
-			</div>
-		{% endif %}
-
-		<span>
-		{% if num_pages >= 2 %}
-			{% for p in page_list %}
-
-				{% ifequal p context.number %}
-
-					<div class="current">{{p}}</div>
-
-				{% else %}
-
-					<div class="link_block"><a href="?page={{p}}" title="第{{p}}页">{{p}}</a></div>
-
-				{% endifequal %}
-
-			{% endfor %}
-
-		</span>
-
-			{% if context.has_next %}
-				<div class="link_block"> <a href="?page={{ context.next_page_number }}">下一页&gt;&gt;</a></div>
-			{% endif %}
-				<div class="prompt_word";>
-					<form method="get" name="filterPageForm">到第
-    					<input class="input_text" type="text" value="1" size="1" name="page">页
-						<button class="ui-btn-s" type="submit">确定</button>
-					</form>
-				</div>
-
-				<div class="prompt_word">
-					<a>[第{{pk}}/{{ context.paginator.num_pages }}页]</a>
-				</div>
-		{% endif %}
-
-	</div>
 
 {% endblock %}
 
