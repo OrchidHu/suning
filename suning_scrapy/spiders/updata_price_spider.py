@@ -2,6 +2,7 @@
 
 import re
 import time
+import datetime
 import scrapy
 import MySQLdb
 from suning_scrapy.items import SuningItem
@@ -46,7 +47,8 @@ class MySpider(scrapy.Spider):
         if price:
             price = price.group(1)
             datas = self.cursor.execute(
-                'SELECT id,price FROM blog_shopping WHERE ident=%s AND user_id=%s' % (item['ident'], item['user_id'])
+                'SELECT id,price,crawl_time FROM blog_shopping WHERE ident=%s AND user_id=%s' % (
+                item['ident'], item['user_id'])
             )
             item['price'] = price
             if datas:
@@ -65,6 +67,10 @@ class MySpider(scrapy.Spider):
                     if email:
                         email = self.cursor.fetchmany(email)[-1:][0][0]
                         self.send_email(email)
+                else:
+                    self.cursor.execute(
+                        "UPDATE suning.blog_shopping SET ch_price=%s WHERE ID=%s" % ("stable", data_id)
+                    )
                 self.cursor.execute(
                     "UPDATE suning.blog_shopping SET crawl_time=%s WHERE ID=%s" % (time.time(), data_id))
                 self.conn.commit()
@@ -87,13 +93,13 @@ class MySpider(scrapy.Spider):
         smtp_port = 587
         server = smtplib.SMTP(smtp_server, smtp_port)
         server.starttls()
-        #server.set_debuglevel(1)
+        # server.set_debuglevel(1)
         server.login(from_addr, password)
         server.sendmail(from_addr, [to_addr], msg.as_string())
         server.quit()
 
     def _format_addr(self, s):
-            name, addr = parseaddr(s)
-            return formataddr(( \
-                Header(name, 'utf-8').encode(), \
-                addr.encode('utf-8') if isinstance(addr, unicode) else addr))
+        name, addr = parseaddr(s)
+        return formataddr(( \
+                              Header(name, 'utf-8').encode(), \
+                              addr.encode('utf-8') if isinstance(addr, unicode) else addr))
