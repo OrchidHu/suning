@@ -68,9 +68,9 @@ class MySpider(scrapy.Spider):
                         email = self.cursor.fetchmany(email)[-1:][0][0]
                         self.send_email(email)
                 else:
-                    stable = 'stable'
+                    stable = "stable"
                     self.cursor.execute(
-                        "UPDATE suning.blog_shopping SET ch_price=%s WHERE ID=%s" % (stable, data_id)
+                        "UPDATE suning.blog_shopping SET ch_price='%s' WHERE ID=%s" % (stable, data_id)
                     )
                 self.cursor.execute(
                     "UPDATE suning.blog_shopping SET crawl_time=%s WHERE ID=%s" % (time.time(), data_id))
