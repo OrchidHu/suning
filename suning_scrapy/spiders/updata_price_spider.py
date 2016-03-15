@@ -52,14 +52,15 @@ class MySpider(scrapy.Spider):
             )
             item['price'] = price
             if datas:
-                datas = self.cursor.fetchmany(datas)[-1:]
-                data_id = datas[0][0]
-                old_price = datas[0][1]
+                data = self.cursor.fetchmany(datas)[-2:]
+                data_id = data[1][0]
+                old_price = data[1][1]
                 if price != old_price:
                     if price > old_price:
                         item['ch_price'] = 'up'
                     else:
                         item['ch_price'] = 'down'
+                    yield item
                     yield item
                     email = self.cursor.execute(
                         'SELECT email FROM blog_spider WHERE user_id=%s' % item['user_id']
@@ -68,10 +69,12 @@ class MySpider(scrapy.Spider):
                         email = self.cursor.fetchmany(email)[-1:][0][0]
                         self.send_email(email)
                 else:
-                    stable = "stable"
-                    self.cursor.execute(
-                        "UPDATE suning.blog_shopping SET ch_price='%s' WHERE ID=%s" % (stable, data_id)
-                    )
+                    crawl_time = data[0][2]
+                    if time.time()-float(crawl_time) > 24*3600:
+                        stable = "stable"
+                        self.cursor.execute(
+                            "UPDATE suning.blog_shopping SET ch_price='%s' WHERE ID=%s" % (stable, data_id)
+                        )
                 self.cursor.execute(
                     "UPDATE suning.blog_shopping SET crawl_time=%s WHERE ID=%s" % (time.time(), data_id))
                 self.conn.commit()
