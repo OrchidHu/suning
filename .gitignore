@@ -1,15 +1,9 @@
 *.pyc
-*.orig
-*.BACKUP.*
 *.REMOTE.*
 *.BASE.*
-*.swp
 .*.*.swo
 *.log
 .venv
-flower.db
-compressor
-.ropeproject
 media
 .idea
 Web/local/
@@ -25,3 +19,4 @@ virenv
 local_venv.sh
 local-uwsgi.ini
 local_ser_flower
+*.pyc
