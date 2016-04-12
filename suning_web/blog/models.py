@@ -6,28 +6,6 @@ from django.db import models
 # Create your models here.
 
 
-class Updata(models.Model):
-
-    ident = models.CharField(
-        verbose_name=u"商品编号",
-        max_length=20
-    )
-    price = models.CharField(
-        verbose_name=u"当前价",
-        max_length=20
-    )
-    last_price = models.CharField(
-        verbose_name=u"原价",
-        max_length=20)
-    crawl_time = models.CharField(
-        verbose_name=u"抓取时间",
-        max_length=50
-    )
-
-    def __unicode__(self):
-        return self.price, self.ident, self.crawl_time
-
-
 class Shopping(models.Model):
 
     user = models.ForeignKey(
@@ -103,13 +81,13 @@ class Spider(models.Model):
     )
     cycle = models.CharField(
         verbose_name=u'抓取间隔时间',
-        max_length=50,
+        max_length=20,
         choices=TIME,
         default=3600*24
     )
     start_time = models.CharField(
         verbose_name=u'开始时间',
-        max_length=20,
+        max_length=50,
         null=True
     )
     email = models.EmailField(

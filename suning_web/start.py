@@ -5,7 +5,7 @@ import time
 import subprocess
 
 while True:
-    conn = MySQLdb.connect(host='127.0.0.1', user='root', passwd='123', db='suning', port=3306, charset='utf8', cursorclass=MySQLdb.cursors.DictCursor)
+    conn = MySQLdb.connect(host='127.0.0.1', user='root', passwd='huwei', db='suning', port=3306, charset='utf8', cursorclass=MySQLdb.cursors.DictCursor)
     cursor = conn.cursor()
     spiders = cursor.execute('SELECT cycle,url,start_time,user_id from blog_spider')
     if spiders:
