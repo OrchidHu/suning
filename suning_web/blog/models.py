@@ -71,7 +71,6 @@ class Spider(models.Model):
         User,
         related_name="pa_spider",
         verbose_name="个人爬虫",
-        on_delete=models.SET_NULL,
         null=True,
         blank=True
     )
