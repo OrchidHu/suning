@@ -1,19 +1,18 @@
 .gitignore
 *.json
 *.pyc
+<<<<<<< HEAD
 *.mo
 *.swp
 *.orig
 *.BACKUP.*
+=======
+>>>>>>> db2eeb259c62ec2b46f90cf230dbb0712f576bd9
 *.REMOTE.*
 *.BASE.*
-*.swp
 .*.*.swo
 *.log
 .venv
-flower.db
-compressor
-.ropeproject
 media
 .idea
 Web/local/
@@ -29,3 +28,4 @@ virenv
 local_venv.sh
 local-uwsgi.ini
 local_ser_flower
+*.pyc
