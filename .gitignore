@@ -1,13 +1,10 @@
 .gitignore
 *.json
 *.pyc
-<<<<<<< HEAD
 *.mo
 *.swp
 *.orig
 *.BACKUP.*
-=======
->>>>>>> db2eeb259c62ec2b46f90cf230dbb0712f576bd9
 *.REMOTE.*
 *.BASE.*
 .*.*.swo
