@@ -76,7 +76,10 @@ class Comment(models.Model):
         unique=True,
         null=True
     )
-
+    tb_name = models.CharField(
+	verbose_name=u"评论表名",
+	max_length=15,
+    )
 
 class Spider(models.Model):
 
