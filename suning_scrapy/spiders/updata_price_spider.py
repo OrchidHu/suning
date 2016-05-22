@@ -38,7 +38,8 @@ class MySpider(scrapy.Spider):
         yield scrapy.Request(url=price_url, meta={'item': item}, callback=self.parse_price)
         is_exist = self.cursor.execute('SELECT * FROM blog_comment WHERE ident=%s' % ident)
         if is_exist == 0:
-            self.cursor.execute('INSERT INTO blog_comment(ident)VALUES(%s)' % ident)
+	    tb_name = "tb"+str(ident)
+	    self.cursor.execute('INSERT INTO blog_comment(ident, tb_name)VALUES(%s,"%s")' % (ident, tb_name))
             self.conn.commit()
 
     def parse_price(self, response):
