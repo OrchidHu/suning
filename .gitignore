@@ -1,4 +1,10 @@
+.gitignore
+*.json
 *.pyc
+*.mo
+*.swp
+*.orig
+*.BACKUP.*
 *.REMOTE.*
 *.BASE.*
 .*.*.swo
