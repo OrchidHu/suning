@@ -1,4 +1,5 @@
 .gitignore
+suning_web/collectedstatic*
 *.json
 *.pyc
 *.mo
