@@ -39,9 +39,9 @@
 				 <div style="width:60px;height:30px;float:left;">当前价:</div>
 				 <div style="width:100px;height:30px;float:left;line-height:20px;font-size:18px;color:red;"><i>¥</i>  {{em.price}}</div>
 				 <div style="width:80px;height:30px;float:left;">
-						 {% if em.ch_price == 'stable' %}<p>价格未变</p>
-						 {% elif em.ch_price == 'up' %}<p style="color:#f60;"><img alt="" title="" src="/static/blog/images/toolup.png"/> 价格上涨</p>
-						 {% else %}<p style="color:green;"><img alt="" title="" src="/static/blog/images/tooldown.png"/> 价格下降</p>
+						 {% if em.ch_price == '1' %}<p style="color:#f60;"><img alt="" title="" src="/static/blog/images/toolup.png"/> 价格上涨</p>
+						 {% elif em.ch_price == '-1' %}<p style="color:green;"><img alt="" title="" src="/static/blog/images/tooldown.png"/> 价格下降</p>
+						 {% else %}<p>价格未变</p>
 						 {% endif %}
 				 </div>
 				 <div style="width:160px;height:30px;float:left;">

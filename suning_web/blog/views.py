@@ -3,7 +3,7 @@ import MySQLdb
 
 import datetime, time
 from django.contrib.auth import authenticate, get_user_model, login, logout
-import time, models
+import time, models, redis
 
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render_to_response, redirect
@@ -18,6 +18,11 @@ from Utils.django_utils import (
 )
 from . import forms
 User = get_user_model()
+
+
+def get_change(ident):
+    redisClient = redis.StrictRedis(host='127.0.0.1',port=6379,db=0)
+    return redisClient.get(ident)
 
 
 class Index(ArgsMixin, TemplateView):
@@ -37,6 +42,7 @@ class Index(ArgsMixin, TemplateView):
         for shopping in all_shopping.reverse()[::-1]:
             if shopping.ident not in idents:
                 idents.append(shopping.ident)
+		shopping.ch_price = get_change(shopping.ident) 
                 context['shopping'].append(shopping)
         context['username'] = request.user.username
         return self.render_to_response(context)

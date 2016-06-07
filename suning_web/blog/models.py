@@ -42,6 +42,11 @@ class Shopping(models.Model):
         max_length=500
     )
 
+    @property
+    def change(self, ident):
+	change = 0
+	return change
+
     def __unicode__(self):
         return self.name
 

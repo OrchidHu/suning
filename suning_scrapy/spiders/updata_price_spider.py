@@ -1,6 +1,6 @@
 # coding:utf8
 
-import re
+import re, redis
 import time
 import datetime
 import scrapy
@@ -57,11 +57,14 @@ class MySpider(scrapy.Spider):
                 data_id = data[1][0]
                 old_price = data[1][1]
                 if price != old_price:
+		    redisClient = redis.StrictRedis(host='127.0.0.1',port=6379,db=0)
                     if price > old_price:
+			redisClient.set(item['ident'], 1)
                         item['ch_price'] = 'up'
                     else:
+			redisClient.set(item['ident'], -1)
                         item['ch_price'] = 'down'
-                    yield item
+		    redisClient.expire(item['ident'], 60*2)
                     yield item
                     email = self.cursor.execute(
                         'SELECT email FROM blog_spider WHERE user_id=%s' % item['user_id']
@@ -86,7 +89,7 @@ class MySpider(scrapy.Spider):
 
     def send_email(self, email):
         from_addr = '826446178@qq.com'
-        password = "glycfmgymnylbbjd"
+        password = "nxnansojlwqxbbba"
         to_addr = "%s" % email
         url = 'http://121.42.174.207/blog/'
         msg = MIMEText('您好!\n       您特定的商品有价格变动,请点击下方的链接查看:\n       %s' % url, 'plain', 'utf-8')
