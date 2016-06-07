@@ -64,7 +64,7 @@ class MySpider(scrapy.Spider):
                     else:
 			redisClient.set(item['ident'], -1)
                         item['ch_price'] = 'down'
-		    redisClient.expire(item['ident'], 60*2)
+		    redisClient.expire(item['ident'], 3600*24)
                     yield item
                     email = self.cursor.execute(
                         'SELECT email FROM blog_spider WHERE user_id=%s' % item['user_id']
