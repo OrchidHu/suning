@@ -88,9 +88,10 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME':'suning',
         'USER':'root',
-        'PASSWORD':'123',
-        'HOST':'',
-        'PORT':'',
+        'PASSWORD':'',
+        #'HOST':'121.196.229.159',
+	'HOST': '192.168.30.139',
+        'PORT':'3306',
     }
 }
 
